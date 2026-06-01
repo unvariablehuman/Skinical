@@ -1,9 +1,7 @@
 # 🔬 Skinical
 
 **Skin Lesion Binary Classification using Classical Machine Learning**  
-COMP7116001 — Computer Vision · BINUS University · 2025
-
-[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://skinical.streamlit.app)
+COMP7116001 — Computer Vision · BINUS University · 2026
 
 ---
 
@@ -91,7 +89,7 @@ Two operating thresholds are reported:
 
 Labels: `melanoma == 1` → malignant, otherwise benign.
 
-Dataset available on [Kaggle](https://www.kaggle.com/datasets/johnchfr/isic-2017).
+Dataset available on [ISIC CHALLENGE 2017](https://challenge.isic-archive.com/data/#2017).
 
 ---
 
@@ -101,19 +99,6 @@ Dataset available on [Kaggle](https://www.kaggle.com/datasets/johnchfr/isic-2017
 - Thomas, E.K. (2021). *Prediction of Malignant Melanoma using Machine Learning.* MSc Thesis, National College of Ireland.
 - ISIC 2017 Challenge: https://challenge.isic-archive.com/landing/2017/
 
----
-
-## Repository Structure
-
-```
-Skinical/
-├── app.py                  # Streamlit app
-├── requirements.txt        # Python dependencies
-├── rf_skinical.pkl         # Trained Random Forest model
-├── scaler_skinical.pkl     # StandardScaler
-├── bovw_kmeans.pkl         # BoVW vocabulary (KMeans)
-└── skinical.ipynb          # Training notebook (Kaggle)
-```
 
 ---
 
@@ -137,4 +122,4 @@ streamlit run app.py
 
 ---
 
-*COMP7116001 Computer Vision · Group Project · BINUS University · 2025*
+*COMP7116001 Computer Vision · Group Project · BINUS University · 2026*
