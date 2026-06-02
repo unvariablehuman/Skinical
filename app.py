@@ -606,7 +606,7 @@ def show_demo(model, scaler, bovw_kmeans):
                         'Blue Channel': b_hist
                     })
                     st.line_chart(hist_df, color=["#ff4b4b", "#4beb4b", "#4b4bff"])
-                    st.caption("Intensity Distribution for RGB Channels")
+                    st.markdown('<p style="text-align: center; color: #8c867e; font-size: 0.8rem; margin-top: 10px;">Intensity Distribution for RGB Channels</p>', unsafe_allow_html=True)
 
             st.markdown('<hr class="divider">', unsafe_allow_html=True)
 
