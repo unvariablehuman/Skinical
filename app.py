@@ -52,12 +52,44 @@ h1, h2, h3 {
     color: #1e1e1e;
 }
 
-.hero-title {
-    font-family: 'DM Serif Display', serif;
+.hero-card {
+    background: linear-gradient(135deg, #d15a75 0%, #e88fa5 100%);
+    border-radius: 20px;
+    padding: 2.8rem 2rem;
+    text-align: center;
+    color: #ffffff;
+    margin-bottom: 2.5rem;
+    box-shadow: 0 8px 24px rgba(209, 90, 117, 0.12);
+}
+
+.hero-card-title {
+    font-family: 'DM Serif Display', serif !important;
     font-size: 3.2rem;
-    color: #d15a75;
+    color: #ffffff !important;
+    margin: 0 0 0.4rem 0;
     line-height: 1.1;
-    margin-bottom: 0.2rem;
+    font-weight: 700;
+}
+
+.hero-card-sub {
+    font-size: 1.05rem;
+    color: rgba(255, 255, 255, 0.9);
+    font-weight: 400;
+    letter-spacing: 0.03em;
+    margin-bottom: 1.4rem;
+}
+
+.hero-card-badge {
+    display: inline-block;
+    padding: 0.4rem 1.2rem;
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 30px;
+    font-size: 0.78rem;
+    color: #ffffff;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
 }
 
 .sidebar-tagline {
@@ -69,14 +101,6 @@ h1, h2, h3 {
     margin-top: -1.2rem;
     margin-bottom: 2rem;
     font-weight: 400;
-}
-
-.hero-sub {
-    font-size: 1rem;
-    color: #736d65;
-    font-weight: 400;
-    letter-spacing: 0.05em;
-    margin-bottom: 2rem;
 }
 
 /* Custom Elements */
@@ -369,10 +393,13 @@ def predict(img_bgr, model, scaler, bovw_kmeans, threshold=THRESHOLD):
 
 # ── Pages ─────────────────────────────────────────────────────────────────────
 def show_description():
-    st.markdown('<div class="hero-title">Skinical</div>', unsafe_allow_html=True)
-    st.markdown('<div class="hero-sub">SKIN LESION CLASSIFIER · ISIC 2017 · CLASSICAL ML</div>',
-                unsafe_allow_html=True)
-    st.markdown('<hr class="divider">', unsafe_allow_html=True)
+    st.markdown("""
+    <div class="hero-card">
+        <div class="hero-card-title">Skinical</div>
+        <div class="hero-card-sub">Skin Lesion Classifier &nbsp;·&nbsp; ISIC 2017 &nbsp;·&nbsp; Classical ML</div>
+        <div class="hero-card-badge">Powered by Classical Machine Learning</div>
+    </div>
+    """, unsafe_allow_html=True)
     
     st.markdown("""
     ### Tentang Project
@@ -456,10 +483,13 @@ def show_description():
     """, unsafe_allow_html=True)
 
 def show_demo(model, scaler, bovw_kmeans):
-    st.markdown('<div class="hero-title">Skinical</div>', unsafe_allow_html=True)
-    st.markdown('<div class="hero-sub">SKIN LESION CLASSIFIER · ISIC 2017 · CLASSICAL ML</div>',
-                unsafe_allow_html=True)
-    st.markdown('<hr class="divider">', unsafe_allow_html=True)
+    st.markdown("""
+    <div class="hero-card">
+        <div class="hero-card-title">Skinical</div>
+        <div class="hero-card-sub">Skin Lesion Classifier &nbsp;·&nbsp; ISIC 2017 &nbsp;·&nbsp; Classical ML</div>
+        <div class="hero-card-badge">Powered by Classical Machine Learning</div>
+    </div>
+    """, unsafe_allow_html=True)
 
     # Upload
     st.markdown("#### Upload Dermoscopic Image")
