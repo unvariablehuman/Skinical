@@ -122,9 +122,10 @@ h1, h2, h3 {
     border-right: 1px solid #f2e1e3 !important;
 }
 
-[data-testid="stSidebar"] * {
+[data-testid="stSidebar"] p,
+[data-testid="stSidebar"] label,
+[data-testid="stSidebar"] li {
     color: #333333 !important;
-    font-family: 'DM Sans', sans-serif;
 }
 
 .sidebar-title {
