@@ -500,10 +500,29 @@ def show_demo(model, scaler, bovw_kmeans):
         label_visibility="collapsed"
     )
 
+    # Initialize session state for sample image
+    if "selected_sample" not in st.session_state:
+        st.session_state.selected_sample = None
+
+    # Reset selected sample if a new file is uploaded
     if uploaded:
-        # Convert to BGR
-        file_bytes = np.asarray(bytearray(uploaded.read()), dtype=np.uint8)
-        img_bgr    = cv2.imdecode(file_bytes, cv2.IMREAD_COLOR)
+        st.session_state.selected_sample = None
+
+    has_image = (uploaded is not None) or (st.session_state.selected_sample is not None)
+
+    if has_image:
+        if st.session_state.selected_sample:
+            st.info(f"Menggunakan gambar sampel: **{Path(st.session_state.selected_sample).name}**")
+            if st.button("Reset Pilihan Gambar"):
+                st.session_state.selected_sample = None
+                st.rerun()
+
+        # Load image BGR
+        if uploaded:
+            file_bytes = np.asarray(bytearray(uploaded.read()), dtype=np.uint8)
+            img_bgr    = cv2.imdecode(file_bytes, cv2.IMREAD_COLOR)
+        else:
+            img_bgr    = cv2.imread(st.session_state.selected_sample)
 
         col1, col2 = st.columns(2)
         
@@ -571,10 +590,33 @@ def show_demo(model, scaler, bovw_kmeans):
 
     else:
         st.markdown("""
-        <div style="border: 1px dashed #d1cbbd; border-radius: 12px; padding: 2.5rem; text-align: center; background-color: #ffffff;">
-            <p style="color:#8c867e; margin:0; font-weight:500;">Upload a dermoscopic image to begin analysis</p>
+        <div style="border: 1px dashed #d1cbbd; border-radius: 12px; padding: 2.5rem; text-align: center; background-color: #ffffff; margin-bottom: 2rem;">
+            <p style="color:#8c867e; margin:0; font-weight:500;">Upload a dermoscopic image or select a sample image below to begin analysis</p>
         </div>
         """, unsafe_allow_html=True)
+
+        st.markdown("#### Or Select a Sample Image")
+        col_s1, col_s2, col_s3 = st.columns(3)
+        
+        samples_dir = Path(__file__).parent / "samples"
+        
+        with col_s1:
+            st.image(str(samples_dir / "sample_1_benign.jpg"), caption="Sample 1 (Benign)", use_container_width=True)
+            if st.button("Use Sample 1", key="btn_s1", use_container_width=True):
+                st.session_state.selected_sample = str(samples_dir / "sample_1_benign.jpg")
+                st.rerun()
+                
+        with col_s2:
+            st.image(str(samples_dir / "sample_2_benign.jpg"), caption="Sample 2 (Benign)", use_container_width=True)
+            if st.button("Use Sample 2", key="btn_s2", use_container_width=True):
+                st.session_state.selected_sample = str(samples_dir / "sample_2_benign.jpg")
+                st.rerun()
+                
+        with col_s3:
+            st.image(str(samples_dir / "sample_3_malignant.jpg"), caption="Sample 3 (Malignant)", use_container_width=True)
+            if st.button("Use Sample 3", key="btn_s3", use_container_width=True):
+                st.session_state.selected_sample = str(samples_dir / "sample_3_malignant.jpg")
+                st.rerun()
 
 # ── UI ────────────────────────────────────────────────────────────────────────
 # Load models
