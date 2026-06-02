@@ -378,7 +378,7 @@ def show_description():
     ### Tentang Project
     **Skinical** adalah sistem klasifikasi lesi kulit berbasis web yang dikembangkan menggunakan Machine Learning klasik. Sistem ini bertujuan untuk membantu mendeteksi dini apakah suatu lesi kulit bersifat **Jinak (Benign)** atau **Ganas (Malignant)**.
     
-    Aplikasi ini dilatih menggunakan dataset **ISIC 2017** (International Skin Imaging Collaboration) yang merupakan standar benchmark dalam riset analisis citra dermatologis.
+    Aplikasi ini dilatih menggunakan dataset [ISIC 2017 (International Skin Imaging Collaboration)](https://challenge.isic-archive.com/data/#2017) yang merupakan standar benchmark dalam riset analisis citra dermatologis.
     
     ---
     
@@ -556,7 +556,7 @@ except Exception as e:
 # Sidebar Navigation
 with st.sidebar:
     st.markdown('<div class="sidebar-title">Skinical</div>', unsafe_allow_html=True)
-    st.markdown('<div class="sidebar-tagline">— Skin Lesion Classifier using Classical ML —</div>', unsafe_allow_html=True)
+    st.markdown('<div class="sidebar-tagline">— Skin Lesion Classifier —</div>', unsafe_allow_html=True)
     page = st.radio(
         "Navigasi",
         ["Deskripsi", "Demo Model"],
@@ -573,8 +573,8 @@ st.markdown('<hr class="divider">', unsafe_allow_html=True)
 st.markdown("""
 <div style="text-align:center; padding: 1rem 0 0.5rem;">
 <p style="color:#9e978f; font-size:0.7rem; font-weight:500; letter-spacing:0.05em; margin:0;">
-Skinical &nbsp;·&nbsp; COMP7116001 Computer Vision &nbsp;·&nbsp; Kelompok 5 &nbsp;·&nbsp; BINUS University &nbsp;·&nbsp; ISIC 2017
+Skinical &nbsp;·&nbsp; COMP7116001 Computer Vision &nbsp;·&nbsp; Kelompok 5 &nbsp;·&nbsp; BINUS University &nbsp;
 </p>
-<p style="color:#c8b8bc; font-size:0.65rem; margin-top:0.5rem; margin-bottom:0;">© 2026 Skinical · All rights reserved</p>
+<p style="color:#c8b8bc; font-size:0.65rem; margin-top:0.5rem; margin-bottom:0;">© 2026 Kelompok 5 · All rights reserved</p>
 </div>
 """, unsafe_allow_html=True)
