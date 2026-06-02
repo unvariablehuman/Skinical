@@ -166,12 +166,15 @@ h1, h2, h3 {
     text-align: center;
     font-weight: bold;
 }
+[data-testid="stSidebar"] [data-testid="stWidgetLabel"] {
+    display: none !important;
+}
 
 [data-testid="stSidebar"] .stRadio > div {
     background-color: transparent !important;
 }
 
-[data-testid="stSidebar"] .stRadio label {
+[data-testid="stSidebar"] .stRadio div[role="radiogroup"] label {
     background-color: rgba(255, 255, 255, 0.65) !important;
     border: 1px solid rgba(74, 21, 33, 0.12) !important;
     border-radius: 10px !important;
@@ -184,7 +187,7 @@ h1, h2, h3 {
     align-items: center !important;
 }
 
-[data-testid="stSidebar"] .stRadio label:hover {
+[data-testid="stSidebar"] .stRadio div[role="radiogroup"] label:hover {
     background-color: rgba(255, 255, 255, 0.95) !important;
     border-color: rgba(74, 21, 33, 0.25) !important;
     transform: translateY(-1px) !important;
@@ -343,31 +346,13 @@ def show_description():
     Berikut adalah detail model klasifikasi yang digunakan di balik layar:
     """)
     
-    # Custom HTML metrics table or cards
     st.markdown("""
-    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 1rem; margin-top: 1rem;">
-        <div class="metric-card">
-            <div class="metric-label">Model</div>
-            <div class="metric-value" style="font-size: 1.4rem;">Random Forest</div>
-        </div>
-        <div class="metric-card">
-            <div class="metric-label">AUC ROC</div>
-            <div class="metric-value" style="font-size: 1.4rem;">0.736</div>
-        </div>
-        <div class="metric-card">
-            <div class="metric-label">Recall</div>
-            <div class="metric-value" style="font-size: 1.4rem;">0.680</div>
-        </div>
-        <div class="metric-card">
-            <div class="metric-label">F1 Malignant</div>
-            <div class="metric-value" style="font-size: 1.4rem;">0.470</div>
-        </div>
-        <div class="metric-card">
-            <div class="metric-label">Threshold</div>
-            <div class="metric-value" style="font-size: 1.4rem;">0.30</div>
-        </div>
-    </div>
-    """, unsafe_allow_html=True)
+    - **Model**: Random Forest
+    - **AUC ROC**: 0.736
+    - **Recall**: 0.680
+    - **F1 Malignant**: 0.470
+    - **Threshold**: 0.30
+    """)
     
     st.markdown("""
     <br>
