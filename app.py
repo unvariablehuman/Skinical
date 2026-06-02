@@ -181,6 +181,70 @@ h1, h2, h3 {
     font-weight: 600 !important;
     color: #d15a75 !important;
 }
+
+/* Tim Project Section Style */
+.section-header {
+    font-family: 'DM Serif Display', serif !important;
+    font-size: 1.8rem;
+    color: #1e1e1e;
+    border-left: 4px solid #d15a75;
+    padding-left: 0.8rem;
+    margin-top: 2.5rem;
+    margin-bottom: 1.2rem;
+    line-height: 1.2;
+}
+
+.team-card {
+    background-color: #ffffff;
+    border: 1px solid #f5d0da;
+    border-radius: 12px;
+    padding: 1.5rem 2rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 12px rgba(209, 90, 117, 0.02);
+}
+
+.team-title {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #d15a75;
+    margin-top: 0;
+    margin-bottom: 1rem;
+}
+
+.team-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+}
+
+.team-table tr {
+    border-bottom: 1px solid #fdf2f4;
+}
+
+.team-table tr:last-child {
+    border-bottom: none;
+}
+
+.team-table td {
+    padding: 0.7rem 1rem;
+    color: #3a2030;
+}
+
+.team-table td.name {
+    text-align: left;
+    font-weight: 500;
+    border-right: 1px solid #fdf2f4;
+    width: 65%;
+    padding-left: 0;
+}
+
+.team-table td.nim {
+    text-align: right;
+    color: #b0697e;
+    font-variant-numeric: tabular-nums;
+    width: 35%;
+    padding-right: 0;
+}
 </style>
 """, unsafe_allow_html=True)
 
@@ -339,6 +403,40 @@ def show_description():
     </div>
     """, unsafe_allow_html=True)
 
+    # Tim Project
+    st.markdown("""
+    <div class="section-header">Tim Project</div>
+    <div class="team-card">
+        <div class="team-title">Kelompok 5</div>
+        <table class="team-table">
+            <tr>
+                <td class="name">Aaron Nikolas Tondosaputro</td>
+                <td class="nim">2802412881</td>
+            </tr>
+            <tr>
+                <td class="name">Albani Kalam Haq</td>
+                <td class="nim">2802498141</td>
+            </tr>
+            <tr>
+                <td class="name">Justin Lysander Setiawan</td>
+                <td class="nim">2802418651</td>
+            </tr>
+            <tr>
+                <td class="name">Kristian Novan</td>
+                <td class="nim">2802458560</td>
+            </tr>
+            <tr>
+                <td class="name">Nadya Salsabila</td>
+                <td class="nim">2802411790</td>
+            </tr>
+            <tr>
+                <td class="name">Sabrina Arfanindia Devi</td>
+                <td class="nim">2802448755</td>
+            </tr>
+        </table>
+    </div>
+    """, unsafe_allow_html=True)
+
 def show_demo(model, scaler, bovw_kmeans):
     st.markdown('<div class="hero-title">Skinical</div>', unsafe_allow_html=True)
     st.markdown('<div class="hero-sub">SKIN LESION CLASSIFIER · ISIC 2017 · CLASSICAL ML</div>',
@@ -455,41 +553,10 @@ elif page == "Demo Model":
 # ── Footer ────────────────────────────────────────────────────────────────────
 st.markdown('<hr class="divider">', unsafe_allow_html=True)
 st.markdown("""
-<div style="text-align:center; padding: 1.5rem 0 0.5rem;">
-<p style="color:#9e978f; font-size:0.75rem; font-weight:500; letter-spacing:0.05em; margin-bottom:1.5rem;">
-Skinical &nbsp;·&nbsp; COMP7116001 Computer Vision &nbsp;·&nbsp; BINUS University &nbsp;·&nbsp; ISIC 2017
+<div style="text-align:center; padding: 1rem 0 0.5rem;">
+<p style="color:#9e978f; font-size:0.7rem; font-weight:500; letter-spacing:0.05em; margin:0;">
+Skinical &nbsp;·&nbsp; COMP7116001 Computer Vision &nbsp;·&nbsp; Kelompok 5 &nbsp;·&nbsp; BINUS University &nbsp;·&nbsp; ISIC 2017
 </p>
-<div style="display:inline-block; text-align:left; background:#fff6f8; border:1px solid #f5d0da; border-radius:14px; padding:1.2rem 2rem; min-width:320px;">
-<p style="font-size:0.7rem; text-transform:uppercase; letter-spacing:0.12em; color:#d15a75; font-weight:600; margin:0 0 0.8rem 0; text-align:center;">
-Kelompok 5
-</p>
-<table style="width:100%; border-collapse:collapse; font-size:0.82rem; color:#3a2030;">
-<tr style="border-bottom:1px solid #f5d0da;">
-<td style="padding:0.35rem 0.8rem 0.35rem 0; font-weight:500;">Aaron Nikolas Tondosaputro</td>
-<td style="padding:0.35rem 0; color:#b0697e; font-variant-numeric:tabular-nums; text-align:right;">2802412881</td>
-</tr>
-<tr style="border-bottom:1px solid #f5d0da;">
-<td style="padding:0.35rem 0.8rem 0.35rem 0; font-weight:500;">Albani Kalam Haq</td>
-<td style="padding:0.35rem 0; color:#b0697e; font-variant-numeric:tabular-nums; text-align:right;">2802498141</td>
-</tr>
-<tr style="border-bottom:1px solid #f5d0da;">
-<td style="padding:0.35rem 0.8rem 0.35rem 0; font-weight:500;">Justin Lysander Setiawan</td>
-<td style="padding:0.35rem 0; color:#b0697e; font-variant-numeric:tabular-nums; text-align:right;">2802418651</td>
-</tr>
-<tr style="border-bottom:1px solid #f5d0da;">
-<td style="padding:0.35rem 0.8rem 0.35rem 0; font-weight:500;">Kristian Novan</td>
-<td style="padding:0.35rem 0; color:#b0697e; font-variant-numeric:tabular-nums; text-align:right;">2802458560</td>
-</tr>
-<tr style="border-bottom:1px solid #f5d0da;">
-<td style="padding:0.35rem 0.8rem 0.35rem 0; font-weight:500;">Nadya Salsabila</td>
-<td style="padding:0.35rem 0; color:#b0697e; font-variant-numeric:tabular-nums; text-align:right;">2802411790</td>
-</tr>
-<tr>
-<td style="padding:0.35rem 0.8rem 0.35rem 0; font-weight:500;">Sabrina Arfanindia Devi</td>
-<td style="padding:0.35rem 0; color:#b0697e; font-variant-numeric:tabular-nums; text-align:right;">2802448755</td>
-</tr>
-</table>
-</div>
-<p style="color:#c8b8bc; font-size:0.68rem; margin-top:1.2rem;">© 2026 Skinical · All rights reserved</p>
+<p style="color:#c8b8bc; font-size:0.65rem; margin-top:0.5rem; margin-bottom:0;">© 2026 Skinical · All rights reserved</p>
 </div>
 """, unsafe_allow_html=True)
