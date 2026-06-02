@@ -508,6 +508,33 @@ def show_demo(model, scaler, bovw_kmeans):
     if uploaded:
         st.session_state.selected_sample = None
 
+    # Gallery of Sample Images (Always visible below the upload widget)
+    st.markdown("<br>#### Or Select a Sample Image", unsafe_allow_html=True)
+    col_s1, col_s2, col_s3 = st.columns(3)
+    samples_dir = Path(__file__).parent / "samples"
+
+    with col_s1:
+        st.image(str(samples_dir / "sample_1_benign.jpg"), caption="Sample 1 (Benign)", use_container_width=True)
+        if st.button("Use Sample 1", key="btn_s1", use_container_width=True):
+            st.session_state.selected_sample = str(samples_dir / "sample_1_benign.jpg")
+            st.rerun()
+
+    with col_s2:
+        st.image(str(samples_dir / "sample_2_benign.jpg"), caption="Sample 2 (Benign)", use_container_width=True)
+        if st.button("Use Sample 2", key="btn_s2", use_container_width=True):
+            st.session_state.selected_sample = str(samples_dir / "sample_2_benign.jpg")
+            st.rerun()
+
+    with col_s3:
+        st.image(str(samples_dir / "sample_3_malignant.jpg"), caption="Sample 3 (Malignant)", use_container_width=True)
+        if st.button("Use Sample 3", key="btn_s3", use_container_width=True):
+            st.session_state.selected_sample = str(samples_dir / "sample_3_malignant.jpg")
+            st.rerun()
+
+    # Divider before the active image
+    st.markdown("<hr class='divider'>", unsafe_allow_html=True)
+
+    # Active Image Display & Analysis Section
     has_image = (uploaded is not None) or (st.session_state.selected_sample is not None)
 
     if has_image:
@@ -532,7 +559,7 @@ def show_demo(model, scaler, bovw_kmeans):
             
         st.markdown("<br>", unsafe_allow_html=True)
         
-        # Tambahan tombol Analyze
+        # Tombol Analyze
         if st.button("Analyze Lesion", type="primary", use_container_width=True):
             with st.spinner("Analyzing and extracting features..."):
                 label, prob, img_pre = predict(img_bgr, model, scaler, bovw_kmeans)
@@ -590,33 +617,10 @@ def show_demo(model, scaler, bovw_kmeans):
 
     else:
         st.markdown("""
-        <div style="border: 1px dashed #d1cbbd; border-radius: 12px; padding: 2.5rem; text-align: center; background-color: #ffffff; margin-bottom: 2rem;">
-            <p style="color:#8c867e; margin:0; font-weight:500;">Upload a dermoscopic image or select a sample image below to begin analysis</p>
+        <div style="border: 1px dashed #d1cbbd; border-radius: 12px; padding: 2.5rem; text-align: center; background-color: #ffffff;">
+            <p style="color:#8c867e; margin:0; font-weight:500;">Upload a dermoscopic image or select a sample image above to begin analysis</p>
         </div>
         """, unsafe_allow_html=True)
-
-        st.markdown("#### Or Select a Sample Image")
-        col_s1, col_s2, col_s3 = st.columns(3)
-        
-        samples_dir = Path(__file__).parent / "samples"
-        
-        with col_s1:
-            st.image(str(samples_dir / "sample_1_benign.jpg"), caption="Sample 1 (Benign)", use_container_width=True)
-            if st.button("Use Sample 1", key="btn_s1", use_container_width=True):
-                st.session_state.selected_sample = str(samples_dir / "sample_1_benign.jpg")
-                st.rerun()
-                
-        with col_s2:
-            st.image(str(samples_dir / "sample_2_benign.jpg"), caption="Sample 2 (Benign)", use_container_width=True)
-            if st.button("Use Sample 2", key="btn_s2", use_container_width=True):
-                st.session_state.selected_sample = str(samples_dir / "sample_2_benign.jpg")
-                st.rerun()
-                
-        with col_s3:
-            st.image(str(samples_dir / "sample_3_malignant.jpg"), caption="Sample 3 (Malignant)", use_container_width=True)
-            if st.button("Use Sample 3", key="btn_s3", use_container_width=True):
-                st.session_state.selected_sample = str(samples_dir / "sample_3_malignant.jpg")
-                st.rerun()
 
 # ── UI ────────────────────────────────────────────────────────────────────────
 # Load models
