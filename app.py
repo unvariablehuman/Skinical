@@ -509,24 +509,25 @@ def show_demo(model, scaler, bovw_kmeans):
         st.session_state.selected_sample = None
 
     # Gallery of Sample Images (Always visible below the upload widget)
-    st.markdown("<br>#### Or Select a Sample Image", unsafe_allow_html=True)
-    col_s1, col_s2, col_s3 = st.columns(3)
+    st.markdown("<br>", unsafe_allow_html=True)
+    st.markdown("#### Or Select a Sample Image")
+    col_s1, col_s2, col_s3, _ = st.columns([1, 1, 1, 2.5])
     samples_dir = Path(__file__).parent / "samples"
 
     with col_s1:
-        st.image(str(samples_dir / "sample_1_benign.jpg"), caption="Sample 1 (Benign)", use_container_width=True)
+        st.image(str(samples_dir / "sample_1_benign.jpg"), caption="Sample 1", use_container_width=True)
         if st.button("Use Sample 1", key="btn_s1", use_container_width=True):
             st.session_state.selected_sample = str(samples_dir / "sample_1_benign.jpg")
             st.rerun()
 
     with col_s2:
-        st.image(str(samples_dir / "sample_2_benign.jpg"), caption="Sample 2 (Benign)", use_container_width=True)
+        st.image(str(samples_dir / "sample_2_benign.jpg"), caption="Sample 2", use_container_width=True)
         if st.button("Use Sample 2", key="btn_s2", use_container_width=True):
             st.session_state.selected_sample = str(samples_dir / "sample_2_benign.jpg")
             st.rerun()
 
     with col_s3:
-        st.image(str(samples_dir / "sample_3_malignant.jpg"), caption="Sample 3 (Malignant)", use_container_width=True)
+        st.image(str(samples_dir / "sample_3_malignant.jpg"), caption="Sample 3", use_container_width=True)
         if st.button("Use Sample 3", key="btn_s3", use_container_width=True):
             st.session_state.selected_sample = str(samples_dir / "sample_3_malignant.jpg")
             st.rerun()
@@ -539,7 +540,9 @@ def show_demo(model, scaler, bovw_kmeans):
 
     if has_image:
         if st.session_state.selected_sample:
-            st.info(f"Menggunakan gambar sampel: **{Path(st.session_state.selected_sample).name}**")
+            filename = Path(st.session_state.selected_sample).name
+            friendly_name = "Sample 1" if "sample_1" in filename else "Sample 2" if "sample_2" in filename else "Sample 3"
+            st.info(f"Menggunakan gambar sampel: **{friendly_name}**")
             if st.button("Reset Pilihan Gambar"):
                 st.session_state.selected_sample = None
                 st.rerun()
