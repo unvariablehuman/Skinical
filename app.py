@@ -456,41 +456,40 @@ elif page == "Demo Model":
 st.markdown('<hr class="divider">', unsafe_allow_html=True)
 st.markdown("""
 <div style="text-align:center; padding: 1.5rem 0 0.5rem;">
-    <p style="color:#9e978f; font-size:0.75rem; font-weight:500; letter-spacing:0.05em; margin-bottom:1.5rem;">
-        Skinical &nbsp;·&nbsp; COMP7116001 Computer Vision &nbsp;·&nbsp; BINUS University &nbsp;·&nbsp; ISIC 2017
-    </p>
-
-    <div style="display:inline-block; text-align:left; background:#fff6f8; border:1px solid #f5d0da; border-radius:14px; padding:1.2rem 2rem; min-width:320px;">
-        <p style="font-size:0.7rem; text-transform:uppercase; letter-spacing:0.12em; color:#d15a75; font-weight:600; margin:0 0 0.8rem 0; text-align:center;">
-            Kelompok 5
-        </p>
-        <table style="width:100%; border-collapse:collapse; font-size:0.82rem; color:#3a2030;">
-            <tr style="border-bottom:1px solid #f5d0da;">
-                <td style="padding:0.35rem 0.8rem 0.35rem 0; font-weight:500;">Aaron Nikolas Tondosaputro</td>
-                <td style="padding:0.35rem 0; color:#b0697e; font-variant-numeric:tabular-nums; text-align:right;">2802412881</td>
-            </tr>
-            <tr style="border-bottom:1px solid #f5d0da;">
-                <td style="padding:0.35rem 0.8rem 0.35rem 0; font-weight:500;">Albani Kalam Haq</td>
-                <td style="padding:0.35rem 0; color:#b0697e; font-variant-numeric:tabular-nums; text-align:right;">2802498141</td>
-            </tr>
-            <tr style="border-bottom:1px solid #f5d0da;">
-                <td style="padding:0.35rem 0.8rem 0.35rem 0; font-weight:500;">Justin Lysander Setiawan</td>
-                <td style="padding:0.35rem 0; color:#b0697e; font-variant-numeric:tabular-nums; text-align:right;">2802418651</td>
-            </tr>
-            <tr style="border-bottom:1px solid #f5d0da;">
-                <td style="padding:0.35rem 0.8rem 0.35rem 0; font-weight:500;">Kristian Novan</td>
-                <td style="padding:0.35rem 0; color:#b0697e; font-variant-numeric:tabular-nums; text-align:right;">2802458560</td>
-            </tr>
-            <tr style="border-bottom:1px solid #f5d0da;">
-                <td style="padding:0.35rem 0.8rem 0.35rem 0; font-weight:500;">Nadya Salsabila</td>
-                <td style="padding:0.35rem 0; color:#b0697e; font-variant-numeric:tabular-nums; text-align:right;">2802411790</td>
-            </tr>
-            <tr>
-                <td style="padding:0.35rem 0.8rem 0.35rem 0; font-weight:500;">Sabrina Arfanindia Devi</td>
-                <td style="padding:0.35rem 0; color:#b0697e; font-variant-numeric:tabular-nums; text-align:right;">2802448755</td>
-            </tr>
-        </table>
-    </div>
-    <p style="color:#c8b8bc; font-size:0.68rem; margin-top:1.2rem;">© 2026 Skinical · All rights reserved</p>
+<p style="color:#9e978f; font-size:0.75rem; font-weight:500; letter-spacing:0.05em; margin-bottom:1.5rem;">
+Skinical &nbsp;·&nbsp; COMP7116001 Computer Vision &nbsp;·&nbsp; BINUS University &nbsp;·&nbsp; ISIC 2017
+</p>
+<div style="display:inline-block; text-align:left; background:#fff6f8; border:1px solid #f5d0da; border-radius:14px; padding:1.2rem 2rem; min-width:320px;">
+<p style="font-size:0.7rem; text-transform:uppercase; letter-spacing:0.12em; color:#d15a75; font-weight:600; margin:0 0 0.8rem 0; text-align:center;">
+Kelompok 5
+</p>
+<table style="width:100%; border-collapse:collapse; font-size:0.82rem; color:#3a2030;">
+<tr style="border-bottom:1px solid #f5d0da;">
+<td style="padding:0.35rem 0.8rem 0.35rem 0; font-weight:500;">Aaron Nikolas Tondosaputro</td>
+<td style="padding:0.35rem 0; color:#b0697e; font-variant-numeric:tabular-nums; text-align:right;">2802412881</td>
+</tr>
+<tr style="border-bottom:1px solid #f5d0da;">
+<td style="padding:0.35rem 0.8rem 0.35rem 0; font-weight:500;">Albani Kalam Haq</td>
+<td style="padding:0.35rem 0; color:#b0697e; font-variant-numeric:tabular-nums; text-align:right;">2802498141</td>
+</tr>
+<tr style="border-bottom:1px solid #f5d0da;">
+<td style="padding:0.35rem 0.8rem 0.35rem 0; font-weight:500;">Justin Lysander Setiawan</td>
+<td style="padding:0.35rem 0; color:#b0697e; font-variant-numeric:tabular-nums; text-align:right;">2802418651</td>
+</tr>
+<tr style="border-bottom:1px solid #f5d0da;">
+<td style="padding:0.35rem 0.8rem 0.35rem 0; font-weight:500;">Kristian Novan</td>
+<td style="padding:0.35rem 0; color:#b0697e; font-variant-numeric:tabular-nums; text-align:right;">2802458560</td>
+</tr>
+<tr style="border-bottom:1px solid #f5d0da;">
+<td style="padding:0.35rem 0.8rem 0.35rem 0; font-weight:500;">Nadya Salsabila</td>
+<td style="padding:0.35rem 0; color:#b0697e; font-variant-numeric:tabular-nums; text-align:right;">2802411790</td>
+</tr>
+<tr>
+<td style="padding:0.35rem 0.8rem 0.35rem 0; font-weight:500;">Sabrina Arfanindia Devi</td>
+<td style="padding:0.35rem 0; color:#b0697e; font-variant-numeric:tabular-nums; text-align:right;">2802448755</td>
+</tr>
+</table>
+</div>
+<p style="color:#c8b8bc; font-size:0.68rem; margin-top:1.2rem;">© 2026 Skinical · All rights reserved</p>
 </div>
 """, unsafe_allow_html=True)
