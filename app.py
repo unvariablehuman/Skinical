@@ -114,10 +114,22 @@ h1, h2, h3 {
 }
 
 /* Sidebar Specifics */
+[data-testid="stSidebar"] {
+    background: linear-gradient(180deg, #ffffff 0%, #fce8ee 100%) !important;
+    border-right: 1px solid #f5d0da !important;
+}
+
+[data-testid="stSidebar"] p,
+[data-testid="stSidebar"] label,
+[data-testid="stSidebar"] li,
+[data-testid="stSidebar"] span {
+    color: #3a2030 !important;
+}
+
 .sidebar-title {
     font-family: 'DM Serif Display', serif;
     font-size: 2.2rem;
-    color: #d15a75;
+    color: #d15a75 !important;
     margin-bottom: 2rem;
     margin-top: 1.5rem;
     text-align: center;
