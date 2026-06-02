@@ -145,6 +145,58 @@ h1, h2, h3 {
     padding: 1.5rem;
     text-align: center;
 }
+
+/* Sidebar styling */
+[data-testid="stSidebar"] {
+    background: linear-gradient(180deg, #fff0f2 0%, #fae1e5 100%) !important;
+    border-right: 1px solid #ffd5dc !important;
+}
+
+[data-testid="stSidebar"] * {
+    color: #4a1521 !important;
+    font-family: 'DM Sans', sans-serif;
+}
+
+.sidebar-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 2.2rem;
+    color: #4a1521 !important;
+    margin-bottom: 2rem;
+    margin-top: 1.5rem;
+    text-align: center;
+    font-weight: bold;
+}
+
+[data-testid="stSidebar"] .stRadio > div {
+    background-color: transparent !important;
+}
+
+[data-testid="stSidebar"] .stRadio label {
+    background-color: rgba(255, 255, 255, 0.65) !important;
+    border: 1px solid rgba(74, 21, 33, 0.12) !important;
+    border-radius: 10px !important;
+    padding: 0.7rem 1.2rem !important;
+    margin-bottom: 0.8rem !important;
+    transition: all 0.25s ease !important;
+    cursor: pointer !important;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.01) !important;
+    display: flex !important;
+    align-items: center !important;
+}
+
+[data-testid="stSidebar"] .stRadio label:hover {
+    background-color: rgba(255, 255, 255, 0.95) !important;
+    border-color: rgba(74, 21, 33, 0.25) !important;
+    transform: translateY(-1px) !important;
+}
+
+/* Style selected option in sidebar radio using modern has selector */
+[data-testid="stSidebar"] .stRadio div[role="radiogroup"] label:has(input:checked) {
+    background-color: #ffd1d7 !important;
+    border-color: #f3a8b2 !important;
+    font-weight: 600 !important;
+    box-shadow: 0 4px 6px rgba(243, 168, 178, 0.15) !important;
+}
 </style>
 """, unsafe_allow_html=True)
 
@@ -256,103 +308,185 @@ def predict(img_bgr, model, scaler, bovw_kmeans, threshold=THRESHOLD):
     return label, prob, img
 
 # ── UI ────────────────────────────────────────────────────────────────────────
-st.markdown('<div class="hero-title">Skinical</div>', unsafe_allow_html=True)
-st.markdown('<div class="hero-sub">SKIN LESION CLASSIFIER · ISIC 2017 · CLASSICAL ML</div>',
-            unsafe_allow_html=True)
+# ── Pages ─────────────────────────────────────────────────────────────────────
+def show_description():
+    st.markdown('<div class="hero-title">Skinical</div>', unsafe_allow_html=True)
+    st.markdown('<div class="hero-sub">SKIN LESION CLASSIFIER · ISIC 2017 · CLASSICAL ML</div>',
+                unsafe_allow_html=True)
+    st.markdown('<hr class="divider">', unsafe_allow_html=True)
+    
+    st.markdown("""
+    ### Tentang Project
+    **Skinical** adalah sistem klasifikasi lesi kulit berbasis web yang dikembangkan menggunakan Machine Learning klasik. Sistem ini bertujuan untuk membantu mendeteksi dini apakah suatu lesi kulit bersifat **Jinak (Benign)** atau **Ganas (Malignant)**.
+    
+    Aplikasi ini dilatih menggunakan dataset **ISIC 2017** (International Skin Imaging Collaboration) yang merupakan standar benchmark dalam riset analisis citra dermatologis.
+    
+    ---
+    
+    ### Alur Kerja & Ekstraksi Fitur
+    Sebelum melakukan klasifikasi, citra dermoskopik melalui proses preprocessing dan ekstraksi fitur yang komprehensif:
+    
+    1. **Preprocessing Citra**:
+       - *Hair Removal*: Menghilangkan rambut pada kulit yang menghalangi lesi menggunakan metode morfologi Blackhat dan Inpainting.
+       - *Contrast Enhancement*: Menggunakan CLAHE (Contrast Limited Adaptive Histogram Equalization) pada ruang warna LAB untuk memperjelas batas lesi.
+    
+    2. **Ekstraksi Fitur Multi-dimensi**:
+       - **Tekstur (LBP)**: *Local Binary Pattern* digunakan untuk mengekstrak pola mikro-tekstur permukaan lesi.
+       - **Tekstur Spasial (GLCM)**: Menggunakan fitur Haralick untuk menangkap hubungan spasial intensitas piksel.
+       - **Bentuk (HOG)**: *Histogram of Oriented Gradients* mengekstrak fitur bentuk dan kontur tepi lesi.
+       - **Warna (LAB & HSV)**: Histogram warna pada ruang warna LAB dan HSV untuk menangkap gradasi warna lesi.
+       - **Fitur Lokal (BoVW)**: *Bag of Visual Words* dengan algoritma ORB untuk merepresentasikan pola visual penting pada lesi.
+       
+    ---
+    
+    ### Informasi & Performa Model
+    Berikut adalah detail model klasifikasi yang digunakan di balik layar:
+    """)
+    
+    # Custom HTML metrics table or cards
+    st.markdown("""
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 1rem; margin-top: 1rem;">
+        <div class="metric-card">
+            <div class="metric-label">Model</div>
+            <div class="metric-value" style="font-size: 1.4rem;">Random Forest</div>
+        </div>
+        <div class="metric-card">
+            <div class="metric-label">AUC ROC</div>
+            <div class="metric-value" style="font-size: 1.4rem;">0.736</div>
+        </div>
+        <div class="metric-card">
+            <div class="metric-label">Recall</div>
+            <div class="metric-value" style="font-size: 1.4rem;">0.680</div>
+        </div>
+        <div class="metric-card">
+            <div class="metric-label">F1 Malignant</div>
+            <div class="metric-value" style="font-size: 1.4rem;">0.470</div>
+        </div>
+        <div class="metric-card">
+            <div class="metric-label">Threshold</div>
+            <div class="metric-value" style="font-size: 1.4rem;">0.30</div>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    st.markdown("""
+    <br>
+    <div class="warning-box">
+        ⚠️ <strong>Penting:</strong> Aplikasi ini dirancang sebagai alat bantu edukasi dan penelitian awal. Hasil klasifikasi model tidak boleh dijadikan satu-satunya rujukan diagnosis medis. Selalu konsultasikan dengan dokter spesialis kulit (dermatolog) berlisensi.
+    </div>
+    """, unsafe_allow_html=True)
 
+def show_demo(model, scaler, bovw_kmeans):
+    st.markdown('<div class="hero-title">Skinical</div>', unsafe_allow_html=True)
+    st.markdown('<div class="hero-sub">SKIN LESION CLASSIFIER · ISIC 2017 · CLASSICAL ML</div>',
+                unsafe_allow_html=True)
+    st.markdown('<hr class="divider">', unsafe_allow_html=True)
 
+    st.markdown('<p style="color:#4a7c59; font-size:0.8rem;">● Model loaded</p>',
+                unsafe_allow_html=True)
 
-st.markdown('<hr class="divider">', unsafe_allow_html=True)
+    # Upload
+    st.markdown("#### Upload Dermoscopic Image")
+    uploaded = st.file_uploader(
+        "Supported: JPG, PNG, JPEG",
+        type=["jpg", "jpeg", "png"],
+        label_visibility="collapsed"
+    )
 
+    if uploaded:
+        # Convert to BGR
+        file_bytes = np.asarray(bytearray(uploaded.read()), dtype=np.uint8)
+        img_bgr    = cv2.imdecode(file_bytes, cv2.IMREAD_COLOR)
+
+        col1, col2 = st.columns(2)
+        with col1:
+            st.markdown("**Original**")
+            st.image(cv2.cvtColor(img_bgr, cv2.COLOR_BGR2RGB),
+                     use_container_width=True)
+
+        with st.spinner("Analyzing..."):
+            label, prob, img_pre = predict(img_bgr, model, scaler, bovw_kmeans)
+
+        with col2:
+            st.markdown("**Preprocessed**")
+            st.image(cv2.cvtColor(img_pre, cv2.COLOR_BGR2RGB),
+                     use_container_width=True)
+
+        st.markdown('<hr class="divider">', unsafe_allow_html=True)
+
+        # Result
+        is_mal  = label == "Malignant"
+        css_cls = "result-malignant" if is_mal else "result-benign"
+        emoji   = "⚠️" if is_mal else "✅"
+        color   = "#f87171" if is_mal else "#4ade80"
+
+        st.markdown(f"""
+        <div class="{css_cls}">
+            <div class="result-label" style="color:{color}">{emoji} {label}</div>
+            <div class="result-prob">Malignant probability: {prob:.1%}</div>
+        </div>
+        """, unsafe_allow_html=True)
+
+        # Metrics
+        st.markdown("<br>", unsafe_allow_html=True)
+        c1, c2, c3 = st.columns(3)
+        with c1:
+            st.markdown(f"""
+            <div class="metric-card">
+                <div class="metric-label">Probability</div>
+                <div class="metric-value">{prob:.1%}</div>
+            </div>""", unsafe_allow_html=True)
+        with c2:
+            conf = abs(prob - 0.5) * 2
+            st.markdown(f"""
+            <div class="metric-card">
+                <div class="metric-label">Confidence</div>
+                <div class="metric-value">{conf:.1%}</div>
+            </div>""", unsafe_allow_html=True)
+        with c3:
+            st.markdown(f"""
+            <div class="metric-card">
+                <div class="metric-label">Threshold</div>
+                <div class="metric-value">{THRESHOLD}</div>
+            </div>""", unsafe_allow_html=True)
+
+        # Warning
+        st.markdown("""
+        <div class="warning-box">
+            ⚠️ <strong>Disclaimer:</strong> This tool is for educational purposes only
+            and is not a substitute for professional medical diagnosis.
+            Always consult a qualified dermatologist.
+        </div>
+        """, unsafe_allow_html=True)
+
+    else:
+        st.markdown("""
+        <div class="upload-area">
+            <p style="color:#6b6661; margin:0">Upload a dermoscopic image to begin analysis</p>
+        </div>
+        """, unsafe_allow_html=True)
+
+# ── UI ────────────────────────────────────────────────────────────────────────
 # Load models
 try:
     model, scaler, bovw_kmeans = load_models()
-    st.markdown('<p style="color:#4a7c59; font-size:0.8rem;">● Model loaded</p>',
-                unsafe_allow_html=True)
 except Exception as e:
     st.error(f"Failed to load model: {e}")
     st.stop()
 
-# Upload
-st.markdown("#### Upload Dermoscopic Image")
-uploaded = st.file_uploader(
-    "Supported: JPG, PNG, JPEG",
-    type=["jpg", "jpeg", "png"],
-    label_visibility="collapsed"
-)
+# Sidebar Navigation
+with st.sidebar:
+    st.markdown('<div class="sidebar-title">Skinical</div>', unsafe_allow_html=True)
+    page = st.radio(
+        "Navigasi",
+        ["Deskripsi", "Demo Model"],
+        label_visibility="collapsed"
+    )
 
-if uploaded:
-    # Convert to BGR
-    file_bytes = np.asarray(bytearray(uploaded.read()), dtype=np.uint8)
-    img_bgr    = cv2.imdecode(file_bytes, cv2.IMREAD_COLOR)
-
-    col1, col2 = st.columns(2)
-    with col1:
-        st.markdown("**Original**")
-        st.image(cv2.cvtColor(img_bgr, cv2.COLOR_BGR2RGB),
-                 use_container_width=True)
-
-    with st.spinner("Analyzing..."):
-        label, prob, img_pre = predict(img_bgr, model, scaler, bovw_kmeans)
-
-    with col2:
-        st.markdown("**Preprocessed**")
-        st.image(cv2.cvtColor(img_pre, cv2.COLOR_BGR2RGB),
-                 use_container_width=True)
-
-    st.markdown('<hr class="divider">', unsafe_allow_html=True)
-
-    # Result
-    is_mal  = label == "Malignant"
-    css_cls = "result-malignant" if is_mal else "result-benign"
-    emoji   = "⚠️" if is_mal else "✅"
-    color   = "#f87171" if is_mal else "#4ade80"
-
-    st.markdown(f"""
-    <div class="{css_cls}">
-        <div class="result-label" style="color:{color}">{emoji} {label}</div>
-        <div class="result-prob">Malignant probability: {prob:.1%}</div>
-    </div>
-    """, unsafe_allow_html=True)
-
-    # Metrics
-    st.markdown("<br>", unsafe_allow_html=True)
-    c1, c2, c3 = st.columns(3)
-    with c1:
-        st.markdown(f"""
-        <div class="metric-card">
-            <div class="metric-label">Probability</div>
-            <div class="metric-value">{prob:.1%}</div>
-        </div>""", unsafe_allow_html=True)
-    with c2:
-        conf = abs(prob - 0.5) * 2
-        st.markdown(f"""
-        <div class="metric-card">
-            <div class="metric-label">Confidence</div>
-            <div class="metric-value">{conf:.1%}</div>
-        </div>""", unsafe_allow_html=True)
-    with c3:
-        st.markdown(f"""
-        <div class="metric-card">
-            <div class="metric-label">Threshold</div>
-            <div class="metric-value">{THRESHOLD}</div>
-        </div>""", unsafe_allow_html=True)
-
-    # Warning
-    st.markdown("""
-    <div class="warning-box">
-        ⚠️ <strong>Disclaimer:</strong> This tool is for educational purposes only
-        and is not a substitute for professional medical diagnosis.
-        Always consult a qualified dermatologist.
-    </div>
-    """, unsafe_allow_html=True)
-
-else:
-    st.markdown("""
-    <div class="upload-area">
-        <p style="color:#444; margin:0">Upload a dermoscopic image to begin analysis</p>
-    </div>
-    """, unsafe_allow_html=True)
+if page == "Deskripsi":
+    show_description()
+elif page == "Demo Model":
+    show_demo(model, scaler, bovw_kmeans)
 
 # ── Footer ────────────────────────────────────────────────────────────────────
 st.markdown('<hr class="divider">', unsafe_allow_html=True)
