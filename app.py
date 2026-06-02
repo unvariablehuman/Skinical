@@ -16,12 +16,12 @@ st.set_page_config(
 # ── CSS ───────────────────────────────────────────────────────────────────────
 st.markdown("""
 <style>
-@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap');
 
 html, body, [class*="css"] {
     font-family: 'DM Sans', sans-serif;
     background-color: #faf9f6;
-    color: #1e1e1e;
+    color: #2c2c2c;
 }
 
 .stApp { background-color: #faf9f6; }
@@ -41,26 +41,28 @@ h1, h2, h3 {
 
 .hero-sub {
     font-size: 1rem;
-    color: #666666;
-    font-weight: 300;
+    color: #736d65;
+    font-weight: 400;
     letter-spacing: 0.05em;
     margin-bottom: 2rem;
 }
 
 .metric-card {
-    background: #f0eee9;
+    background: #ffffff;
     border: 1px solid #e2ded5;
     border-radius: 12px;
     padding: 1.2rem 1.5rem;
     text-align: center;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.02);
 }
 
 .metric-label {
     font-size: 0.75rem;
-    color: #77726a;
+    color: #8c867e;
     text-transform: uppercase;
     letter-spacing: 0.1em;
     margin-bottom: 0.3rem;
+    font-weight: 500;
 }
 
 .metric-value {
@@ -92,9 +94,9 @@ h1, h2, h3 {
 }
 
 .result-prob {
-    font-size: 0.9rem;
+    font-size: 0.95rem;
     color: #555555;
-    letter-spacing: 0.05em;
+    letter-spacing: 0.02em;
 }
 
 .warning-box {
@@ -107,65 +109,34 @@ h1, h2, h3 {
     margin-top: 1.5rem;
 }
 
-.info-chip {
-    display: inline-block;
-    background: #f0eee9;
-    border: 1px solid #e2ded5;
-    border-radius: 20px;
-    padding: 0.25rem 0.8rem;
-    font-size: 0.78rem;
-    color: #555555;
-    margin: 0.2rem;
-}
-
 .divider {
     border: none;
     border-top: 1px solid #e2ded5;
     margin: 2rem 0;
 }
 
-.stButton > button {
-    background: #1e1e1e !important;
-    color: #faf9f6 !important;
-    border: none !important;
-    border-radius: 8px !important;
-    font-family: 'DM Sans', sans-serif !important;
-    font-weight: 500 !important;
-    padding: 0.6rem 2rem !important;
-    width: 100%;
-}
-
-.stButton > button:hover {
-    background: #333333 !important;
-}
-
-.upload-area {
-    border: 1px dashed #d1cbbd;
-    border-radius: 12px;
-    padding: 1.5rem;
-    text-align: center;
-}
-
-/* Sidebar styling */
+/* Sidebar styling - Modern Minimalist */
 [data-testid="stSidebar"] {
-    background: linear-gradient(180deg, #fff0f2 0%, #fae1e5 100%) !important;
-    border-right: 1px solid #ffd5dc !important;
+    /* Gradasi putih ke pink yang sangat lembut di bawah */
+    background: linear-gradient(180deg, #ffffff 0%, #fff0f2 100%) !important;
+    border-right: 1px solid #f2e1e3 !important;
 }
 
 [data-testid="stSidebar"] * {
-    color: #4a1521 !important;
+    color: #333333 !important;
     font-family: 'DM Sans', sans-serif;
 }
 
 .sidebar-title {
     font-family: 'DM Serif Display', serif;
     font-size: 2.2rem;
-    color: #4a1521 !important;
+    color: #d15a75 !important; /* Aksen dark pink elegan */
     margin-bottom: 2rem;
     margin-top: 1.5rem;
     text-align: center;
     font-weight: bold;
 }
+
 [data-testid="stSidebar"] [data-testid="stWidgetLabel"] {
     display: none !important;
 }
@@ -174,32 +145,36 @@ h1, h2, h3 {
     background-color: transparent !important;
 }
 
+/* Hapus bentuk card dari navigasi radio button */
 [data-testid="stSidebar"] .stRadio div[role="radiogroup"] label {
-    background-color: rgba(255, 255, 255, 0.65) !important;
-    border: 1px solid rgba(74, 21, 33, 0.12) !important;
-    border-radius: 10px !important;
-    padding: 0.7rem 1.2rem !important;
-    margin-bottom: 0.8rem !important;
-    transition: all 0.25s ease !important;
+    background-color: transparent !important;
+    border: none !important;
+    border-radius: 8px !important;
+    padding: 0.6rem 1rem !important;
+    margin-bottom: 0.4rem !important;
+    transition: all 0.2s ease !important;
     cursor: pointer !important;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.01) !important;
-    display: flex !important;
-    align-items: center !important;
+    box-shadow: none !important;
 }
 
 [data-testid="stSidebar"] .stRadio div[role="radiogroup"] label:hover {
-    background-color: rgba(255, 255, 255, 0.95) !important;
-    border-color: rgba(74, 21, 33, 0.25) !important;
-    transform: translateY(-1px) !important;
+    background-color: #fff6f7 !important;
+    color: #d15a75 !important;
 }
 
-/* Style selected option in sidebar radio using modern has selector */
+/* Style untuk menu yang sedang dipilih (aktif) */
 [data-testid="stSidebar"] .stRadio div[role="radiogroup"] label:has(input:checked) {
-    background-color: #ffd1d7 !important;
-    border-color: #f3a8b2 !important;
+    background-color: transparent !important;
     font-weight: 600 !important;
-    box-shadow: 0 4px 6px rgba(243, 168, 178, 0.15) !important;
+    color: #d15a75 !important;
 }
+
+/* Ubah warna bullet radio button saat dipilih jadi pink */
+[data-testid="stSidebar"] .stRadio div[role="radiogroup"] label:has(input:checked) div[data-baseweb="radio"] div {
+    background-color: #d15a75 !important;
+    border-color: #d15a75 !important;
+}
+
 </style>
 """, unsafe_allow_html=True)
 
@@ -247,7 +222,7 @@ def preprocess(img_bgr, size=TARGET_SIZE):
 def extract_lbp(gray, P=24, R=3, n_bins=64):
     lbp  = local_binary_pattern(gray, P=P, R=R, method='uniform')
     hist, _ = np.histogram(lbp.ravel(), bins=n_bins,
-                            range=(0, P+2), density=True)
+                           range=(0, P+2), density=True)
     return hist
 
 def extract_glcm(gray):
@@ -310,7 +285,6 @@ def predict(img_bgr, model, scaler, bovw_kmeans, threshold=THRESHOLD):
     label   = "Malignant" if prob >= threshold else "Benign"
     return label, prob, img
 
-# ── UI ────────────────────────────────────────────────────────────────────────
 # ── Pages ─────────────────────────────────────────────────────────────────────
 def show_description():
     st.markdown('<div class="hero-title">Skinical</div>', unsafe_allow_html=True)
@@ -344,9 +318,7 @@ def show_description():
     
     ### Informasi & Performa Model
     Berikut adalah detail model klasifikasi yang digunakan di balik layar:
-    """)
     
-    st.markdown("""
     - **Model**: Random Forest
     - **AUC ROC**: 0.736
     - **Recall**: 0.680
@@ -367,7 +339,7 @@ def show_demo(model, scaler, bovw_kmeans):
                 unsafe_allow_html=True)
     st.markdown('<hr class="divider">', unsafe_allow_html=True)
 
-    st.markdown('<p style="color:#4a7c59; font-size:0.8rem;">● Model loaded</p>',
+    st.markdown('<p style="color:#d15a75; font-size:0.8rem; font-weight:600;">● Model loaded successfully</p>',
                 unsafe_allow_html=True)
 
     # Upload
@@ -446,8 +418,8 @@ def show_demo(model, scaler, bovw_kmeans):
 
     else:
         st.markdown("""
-        <div class="upload-area">
-            <p style="color:#6b6661; margin:0">Upload a dermoscopic image to begin analysis</p>
+        <div style="border: 1px dashed #d1cbbd; border-radius: 12px; padding: 2.5rem; text-align: center; background-color: #ffffff;">
+            <p style="color:#8c867e; margin:0; font-weight:500;">Upload a dermoscopic image to begin analysis</p>
         </div>
         """, unsafe_allow_html=True)
 
@@ -476,7 +448,7 @@ elif page == "Demo Model":
 # ── Footer ────────────────────────────────────────────────────────────────────
 st.markdown('<hr class="divider">', unsafe_allow_html=True)
 st.markdown("""
-<p style="color:#777; font-size:0.75rem; text-align:center;">
+<p style="color:#9e978f; font-size:0.75rem; text-align:center; font-weight:500;">
 Skinical · COMP7116001 Computer Vision · BINUS University · ISIC 2017
 </p>
 """, unsafe_allow_html=True)
