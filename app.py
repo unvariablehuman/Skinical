@@ -19,8 +19,20 @@ st.markdown("""
 @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap');
 
 /* Typography setup */
-html, body, [class*="css"] {
+html, body {
     font-family: 'DM Sans', sans-serif;
+    color: #2c2c2c;
+}
+
+/* Main content: pure white */
+.stApp,
+.stAppViewContainer,
+[data-testid="stAppViewContainer"],
+.main,
+.block-container,
+[data-testid="stAppViewBlockContainer"] {
+    background-color: #ffffff !important;
+    background: #ffffff !important;
 }
 
 h1, h2, h3 {
