@@ -4,7 +4,19 @@ import numpy as np
 import joblib
 from PIL import Image
 from pathlib import Path
+import base64
 from skimage.feature import local_binary_pattern, hog
+
+# Load assets
+try:
+    flower_path = Path(__file__).parent / "flower.png"
+    if flower_path.exists():
+        with open(flower_path, "rb") as f:
+            flower_base64 = base64.b64encode(f.read()).decode()
+    else:
+        flower_base64 = ""
+except Exception:
+    flower_base64 = ""
 
 # ── Page config ───────────────────────────────────────────────────────────────
 st.set_page_config(
@@ -405,36 +417,42 @@ def show_description():
     """, unsafe_allow_html=True)
 
     # Tim Project
-    st.markdown("""
+    img_html = f"<div style='flex-shrink: 0; width: 85px; height: 85px; display: flex; align-items: center; justify-content: center; margin-left: 0.5rem;'><img src='data:image/png;base64,{flower_base64}' style='width: 100%; height: auto; object-fit: contain;' /></div>" if flower_base64 else ""
+    st.markdown(f"""
     <div class="section-header">Tim Project</div>
     <div class="team-card">
-        <div class="team-title">Kelompok 5</div>
-        <table class="team-table">
-            <tr>
-                <td class="name">Aaron Nikolas Tondosaputro</td>
-                <td class="nim">2802412881</td>
-            </tr>
-            <tr>
-                <td class="name">Albani Kalam Haq</td>
-                <td class="nim">2802498141</td>
-            </tr>
-            <tr>
-                <td class="name">Justin Lysander Setiawan</td>
-                <td class="nim">2802418651</td>
-            </tr>
-            <tr>
-                <td class="name">Kristian Novan</td>
-                <td class="nim">2802458560</td>
-            </tr>
-            <tr>
-                <td class="name">Nadya Salsabila</td>
-                <td class="nim">2802411790</td>
-            </tr>
-            <tr>
-                <td class="name">Sabrina Arfanindia Devi</td>
-                <td class="nim">2802448755</td>
-            </tr>
-        </table>
+        <div style="display: flex; align-items: center; justify-content: space-between;">
+            <div style="flex: 1; margin-right: 1.2rem;">
+                <div class="team-title">Kelompok 5</div>
+                <table class="team-table">
+                    <tr>
+                        <td class="name">Aaron Nikolas Tondosaputro</td>
+                        <td class="nim">2802412881</td>
+                    </tr>
+                    <tr>
+                        <td class="name">Albani Kalam Haq</td>
+                        <td class="nim">2802498141</td>
+                    </tr>
+                    <tr>
+                        <td class="name">Justin Lysander Setiawan</td>
+                        <td class="nim">2802418651</td>
+                    </tr>
+                    <tr>
+                        <td class="name">Kristian Novan</td>
+                        <td class="nim">2802458560</td>
+                    </tr>
+                    <tr>
+                        <td class="name">Nadya Salsabila</td>
+                        <td class="nim">2802411790</td>
+                    </tr>
+                    <tr>
+                        <td class="name">Sabrina Arfanindia Devi</td>
+                        <td class="nim">2802448755</td>
+                    </tr>
+                </table>
+            </div>
+            {img_html}
+        </div>
     </div>
     """, unsafe_allow_html=True)
 
