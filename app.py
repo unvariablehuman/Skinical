@@ -43,9 +43,20 @@ h1, h2, h3 {
 .hero-title {
     font-family: 'DM Serif Display', serif;
     font-size: 3.2rem;
-    color: #1e1e1e;
+    color: #d15a75;
     line-height: 1.1;
     margin-bottom: 0.2rem;
+}
+
+.sidebar-tagline {
+    font-size: 0.72rem;
+    color: #b0697e;
+    letter-spacing: 0.08em;
+    text-align: center;
+    text-transform: uppercase;
+    margin-top: -1.2rem;
+    margin-bottom: 2rem;
+    font-weight: 400;
 }
 
 .hero-sub {
@@ -429,6 +440,7 @@ except Exception as e:
 # Sidebar Navigation
 with st.sidebar:
     st.markdown('<div class="sidebar-title">Skinical</div>', unsafe_allow_html=True)
+    st.markdown('<div class="sidebar-tagline">— Skin Lesion Classifier using Classical ML —</div>', unsafe_allow_html=True)
     page = st.radio(
         "Navigasi",
         ["Deskripsi", "Demo Model"],
