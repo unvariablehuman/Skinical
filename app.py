@@ -20,35 +20,36 @@ st.markdown("""
 
 html, body, [class*="css"] {
     font-family: 'DM Sans', sans-serif;
-    background-color: #0f0f0f;
-    color: #f0ece4;
+    background-color: #faf9f6;
+    color: #1e1e1e;
 }
 
-.stApp { background-color: #0f0f0f; }
+.stApp { background-color: #faf9f6; }
 
 h1, h2, h3 {
     font-family: 'DM Serif Display', serif !important;
+    color: #1e1e1e;
 }
 
 .hero-title {
     font-family: 'DM Serif Display', serif;
     font-size: 3.2rem;
-    color: #f0ece4;
+    color: #1e1e1e;
     line-height: 1.1;
     margin-bottom: 0.2rem;
 }
 
 .hero-sub {
     font-size: 1rem;
-    color: #888;
+    color: #666666;
     font-weight: 300;
     letter-spacing: 0.05em;
     margin-bottom: 2rem;
 }
 
 .metric-card {
-    background: #1a1a1a;
-    border: 1px solid #2a2a2a;
+    background: #f0eee9;
+    border: 1px solid #e2ded5;
     border-radius: 12px;
     padding: 1.2rem 1.5rem;
     text-align: center;
@@ -56,7 +57,7 @@ h1, h2, h3 {
 
 .metric-label {
     font-size: 0.75rem;
-    color: #666;
+    color: #77726a;
     text-transform: uppercase;
     letter-spacing: 0.1em;
     margin-bottom: 0.3rem;
@@ -65,20 +66,20 @@ h1, h2, h3 {
 .metric-value {
     font-family: 'DM Serif Display', serif;
     font-size: 1.8rem;
-    color: #f0ece4;
+    color: #1e1e1e;
 }
 
 .result-malignant {
-    background: linear-gradient(135deg, #2d0f0f, #1a0a0a);
-    border: 1px solid #7f1d1d;
+    background: linear-gradient(135deg, #fff5f5, #ffe3e3);
+    border: 1px solid #fecaca;
     border-radius: 16px;
     padding: 2rem;
     text-align: center;
 }
 
 .result-benign {
-    background: linear-gradient(135deg, #0f1f0f, #0a150a);
-    border: 1px solid #14532d;
+    background: linear-gradient(135deg, #f0fdf4, #dcfce7);
+    border: 1px solid #bbf7d0;
     border-radius: 16px;
     padding: 2rem;
     text-align: center;
@@ -92,40 +93,40 @@ h1, h2, h3 {
 
 .result-prob {
     font-size: 0.9rem;
-    color: #888;
+    color: #555555;
     letter-spacing: 0.05em;
 }
 
 .warning-box {
-    background: #1a1500;
-    border: 1px solid #3d3000;
+    background: #fffbeb;
+    border: 1px solid #fef3c7;
     border-radius: 8px;
     padding: 1rem 1.2rem;
     font-size: 0.85rem;
-    color: #a89060;
+    color: #b45309;
     margin-top: 1.5rem;
 }
 
 .info-chip {
     display: inline-block;
-    background: #1a1a1a;
-    border: 1px solid #2a2a2a;
+    background: #f0eee9;
+    border: 1px solid #e2ded5;
     border-radius: 20px;
     padding: 0.25rem 0.8rem;
     font-size: 0.78rem;
-    color: #888;
+    color: #555555;
     margin: 0.2rem;
 }
 
 .divider {
     border: none;
-    border-top: 1px solid #1f1f1f;
+    border-top: 1px solid #e2ded5;
     margin: 2rem 0;
 }
 
 .stButton > button {
-    background: #f0ece4 !important;
-    color: #0f0f0f !important;
+    background: #1e1e1e !important;
+    color: #faf9f6 !important;
     border: none !important;
     border-radius: 8px !important;
     font-family: 'DM Sans', sans-serif !important;
@@ -135,11 +136,11 @@ h1, h2, h3 {
 }
 
 .stButton > button:hover {
-    background: #d4cfc7 !important;
+    background: #333333 !important;
 }
 
 .upload-area {
-    border: 1px dashed #2a2a2a;
+    border: 1px dashed #d1cbbd;
     border-radius: 12px;
     padding: 1.5rem;
     text-align: center;
@@ -259,16 +260,7 @@ st.markdown('<div class="hero-title">Skinical</div>', unsafe_allow_html=True)
 st.markdown('<div class="hero-sub">SKIN LESION CLASSIFIER · ISIC 2017 · CLASSICAL ML</div>',
             unsafe_allow_html=True)
 
-# Model info chips
-st.markdown("""
-<div>
-  <span class="info-chip">Random Forest</span>
-  <span class="info-chip">AUC 0.736</span>
-  <span class="info-chip">Recall 0.68</span>
-  <span class="info-chip">F1 Malignant 0.47</span>
-  <span class="info-chip">Threshold 0.30</span>
-</div>
-""", unsafe_allow_html=True)
+
 
 st.markdown('<hr class="divider">', unsafe_allow_html=True)
 
@@ -365,7 +357,7 @@ else:
 # ── Footer ────────────────────────────────────────────────────────────────────
 st.markdown('<hr class="divider">', unsafe_allow_html=True)
 st.markdown("""
-<p style="color:#333; font-size:0.75rem; text-align:center;">
+<p style="color:#777; font-size:0.75rem; text-align:center;">
 Skinical · COMP7116001 Computer Vision · BINUS University · ISIC 2017
 </p>
 """, unsafe_allow_html=True)
