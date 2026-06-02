@@ -18,13 +18,10 @@ st.markdown("""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap');
 
+/* Typography setup */
 html, body, [class*="css"] {
     font-family: 'DM Sans', sans-serif;
-    background-color: #faf9f6;
-    color: #2c2c2c;
 }
-
-.stApp { background-color: #faf9f6; }
 
 h1, h2, h3 {
     font-family: 'DM Serif Display', serif !important;
@@ -47,6 +44,7 @@ h1, h2, h3 {
     margin-bottom: 2rem;
 }
 
+/* Custom Elements */
 .metric-card {
     background: #ffffff;
     border: 1px solid #e2ded5;
@@ -115,23 +113,11 @@ h1, h2, h3 {
     margin: 2rem 0;
 }
 
-/* Sidebar styling - Modern Minimalist */
-[data-testid="stSidebar"] {
-    /* Gradasi putih ke pink yang sangat lembut di bawah */
-    background: linear-gradient(180deg, #ffffff 0%, #fff0f2 100%) !important;
-    border-right: 1px solid #f2e1e3 !important;
-}
-
-[data-testid="stSidebar"] p,
-[data-testid="stSidebar"] label,
-[data-testid="stSidebar"] li {
-    color: #333333 !important;
-}
-
+/* Sidebar Specifics */
 .sidebar-title {
     font-family: 'DM Serif Display', serif;
     font-size: 2.2rem;
-    color: #d15a75 !important; /* Aksen dark pink elegan */
+    color: #d15a75;
     margin-bottom: 2rem;
     margin-top: 1.5rem;
     text-align: center;
@@ -142,40 +128,24 @@ h1, h2, h3 {
     display: none !important;
 }
 
-[data-testid="stSidebar"] .stRadio > div {
-    background-color: transparent !important;
-}
-
-/* Hapus bentuk card dari navigasi radio button */
+/* Hapus kotak di radio button, biarkan terlihat menyatu */
 [data-testid="stSidebar"] .stRadio div[role="radiogroup"] label {
     background-color: transparent !important;
     border: none !important;
-    border-radius: 8px !important;
-    padding: 0.6rem 1rem !important;
-    margin-bottom: 0.4rem !important;
+    padding: 0.5rem 1rem !important;
+    margin-bottom: 0.2rem !important;
     transition: all 0.2s ease !important;
     cursor: pointer !important;
-    box-shadow: none !important;
 }
 
 [data-testid="stSidebar"] .stRadio div[role="radiogroup"] label:hover {
-    background-color: #fff6f7 !important;
     color: #d15a75 !important;
 }
 
-/* Style untuk menu yang sedang dipilih (aktif) */
 [data-testid="stSidebar"] .stRadio div[role="radiogroup"] label:has(input:checked) {
-    background-color: transparent !important;
     font-weight: 600 !important;
     color: #d15a75 !important;
 }
-
-/* Ubah warna bullet radio button saat dipilih jadi pink */
-[data-testid="stSidebar"] .stRadio div[role="radiogroup"] label:has(input:checked) div[data-baseweb="radio"] div {
-    background-color: #d15a75 !important;
-    border-color: #d15a75 !important;
-}
-
 </style>
 """, unsafe_allow_html=True)
 
@@ -340,9 +310,6 @@ def show_demo(model, scaler, bovw_kmeans):
                 unsafe_allow_html=True)
     st.markdown('<hr class="divider">', unsafe_allow_html=True)
 
-    st.markdown('<p style="color:#d15a75; font-size:0.8rem; font-weight:600;">● Model loaded successfully</p>',
-                unsafe_allow_html=True)
-
     # Upload
     st.markdown("#### Upload Dermoscopic Image")
     uploaded = st.file_uploader(
@@ -357,65 +324,68 @@ def show_demo(model, scaler, bovw_kmeans):
         img_bgr    = cv2.imdecode(file_bytes, cv2.IMREAD_COLOR)
 
         col1, col2 = st.columns(2)
+        
         with col1:
-            st.markdown("**Original**")
-            st.image(cv2.cvtColor(img_bgr, cv2.COLOR_BGR2RGB),
-                     use_container_width=True)
-
-        with st.spinner("Analyzing..."):
-            label, prob, img_pre = predict(img_bgr, model, scaler, bovw_kmeans)
-
-        with col2:
-            st.markdown("**Preprocessed**")
-            st.image(cv2.cvtColor(img_pre, cv2.COLOR_BGR2RGB),
-                     use_container_width=True)
-
-        st.markdown('<hr class="divider">', unsafe_allow_html=True)
-
-        # Result
-        is_mal  = label == "Malignant"
-        css_cls = "result-malignant" if is_mal else "result-benign"
-        emoji   = "⚠️" if is_mal else "✅"
-        color   = "#f87171" if is_mal else "#4ade80"
-
-        st.markdown(f"""
-        <div class="{css_cls}">
-            <div class="result-label" style="color:{color}">{emoji} {label}</div>
-            <div class="result-prob">Malignant probability: {prob:.1%}</div>
-        </div>
-        """, unsafe_allow_html=True)
-
-        # Metrics
+            st.markdown("**Original Image**")
+            st.image(cv2.cvtColor(img_bgr, cv2.COLOR_BGR2RGB), use_container_width=True)
+            
         st.markdown("<br>", unsafe_allow_html=True)
-        c1, c2, c3 = st.columns(3)
-        with c1:
-            st.markdown(f"""
-            <div class="metric-card">
-                <div class="metric-label">Probability</div>
-                <div class="metric-value">{prob:.1%}</div>
-            </div>""", unsafe_allow_html=True)
-        with c2:
-            conf = abs(prob - 0.5) * 2
-            st.markdown(f"""
-            <div class="metric-card">
-                <div class="metric-label">Confidence</div>
-                <div class="metric-value">{conf:.1%}</div>
-            </div>""", unsafe_allow_html=True)
-        with c3:
-            st.markdown(f"""
-            <div class="metric-card">
-                <div class="metric-label">Threshold</div>
-                <div class="metric-value">{THRESHOLD}</div>
-            </div>""", unsafe_allow_html=True)
+        
+        # Tambahan tombol Analyze
+        if st.button("Analyze Lesion", type="primary", use_container_width=True):
+            with st.spinner("Analyzing and extracting features..."):
+                label, prob, img_pre = predict(img_bgr, model, scaler, bovw_kmeans)
 
-        # Warning
-        st.markdown("""
-        <div class="warning-box">
-            ⚠️ <strong>Disclaimer:</strong> This tool is for educational purposes only
-            and is not a substitute for professional medical diagnosis.
-            Always consult a qualified dermatologist.
-        </div>
-        """, unsafe_allow_html=True)
+            with col2:
+                st.markdown("**Preprocessed Image**")
+                st.image(cv2.cvtColor(img_pre, cv2.COLOR_BGR2RGB), use_container_width=True)
+
+            st.markdown('<hr class="divider">', unsafe_allow_html=True)
+
+            # Result
+            is_mal  = label == "Malignant"
+            css_cls = "result-malignant" if is_mal else "result-benign"
+            emoji   = "⚠️" if is_mal else "✅"
+            color   = "#f87171" if is_mal else "#4ade80"
+
+            st.markdown(f"""
+            <div class="{css_cls}">
+                <div class="result-label" style="color:{color}">{emoji} {label}</div>
+                <div class="result-prob">Malignant probability: {prob:.1%}</div>
+            </div>
+            """, unsafe_allow_html=True)
+
+            # Metrics
+            st.markdown("<br>", unsafe_allow_html=True)
+            c1, c2, c3 = st.columns(3)
+            with c1:
+                st.markdown(f"""
+                <div class="metric-card">
+                    <div class="metric-label">Probability</div>
+                    <div class="metric-value">{prob:.1%}</div>
+                </div>""", unsafe_allow_html=True)
+            with c2:
+                conf = abs(prob - 0.5) * 2
+                st.markdown(f"""
+                <div class="metric-card">
+                    <div class="metric-label">Confidence</div>
+                    <div class="metric-value">{conf:.1%}</div>
+                </div>""", unsafe_allow_html=True)
+            with c3:
+                st.markdown(f"""
+                <div class="metric-card">
+                    <div class="metric-label">Threshold</div>
+                    <div class="metric-value">{THRESHOLD}</div>
+                </div>""", unsafe_allow_html=True)
+
+            # Warning
+            st.markdown("""
+            <div class="warning-box">
+                ⚠️ <strong>Disclaimer:</strong> This tool is for educational purposes only
+                and is not a substitute for professional medical diagnosis.
+                Always consult a qualified dermatologist.
+            </div>
+            """, unsafe_allow_html=True)
 
     else:
         st.markdown("""
