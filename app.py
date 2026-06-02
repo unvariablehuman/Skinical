@@ -570,10 +570,10 @@ def show_demo(model, scaler, bovw_kmeans):
             with col2:
                 st.markdown("**Feature Extraction Visualizer**")
                 tab1, tab2, tab3, tab4 = st.tabs([
-                    "✨ Preprocessed",
-                    "📐 HOG (Shape)",
-                    "🕸️ LBP (Texture)",
-                    "🎨 Color Histogram"
+                    "Preprocessed",
+                    "HOG (Shape)",
+                    "LBP (Texture)",
+                    "Color Histogram"
                 ])
                 
                 with tab1:
