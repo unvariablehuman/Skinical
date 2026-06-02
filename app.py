@@ -198,23 +198,24 @@ h1, h2, h3 {
     background-color: #ffffff;
     border: 1px solid #f5d0da;
     border-radius: 12px;
-    padding: 1.5rem 2rem;
+    padding: 1rem 1.2rem;
     margin-bottom: 2rem;
+    max-width: 480px;
     box-shadow: 0 4px 12px rgba(209, 90, 117, 0.02);
 }
 
 .team-title {
-    font-size: 1rem;
+    font-size: 0.95rem;
     font-weight: 600;
     color: #d15a75;
     margin-top: 0;
-    margin-bottom: 1rem;
+    margin-bottom: 0.8rem;
 }
 
 .team-table {
     width: 100%;
     border-collapse: collapse;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
 }
 
 .team-table tr {
@@ -226,7 +227,7 @@ h1, h2, h3 {
 }
 
 .team-table td {
-    padding: 0.7rem 1rem;
+    padding: 0.45rem 0.6rem;
     color: #3a2030;
 }
 
