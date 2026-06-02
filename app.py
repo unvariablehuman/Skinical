@@ -212,7 +212,6 @@ h1, h2, h3 {
     border-radius: 12px;
     padding: 1rem 1.2rem;
     margin-bottom: 2rem;
-    max-width: 480px;
     box-shadow: 0 4px 12px rgba(209, 90, 117, 0.02);
 }
 
@@ -247,7 +246,7 @@ h1, h2, h3 {
     text-align: left;
     font-weight: 500;
     border-right: 1px solid #fdf2f4;
-    width: 65%;
+    width: 75%;
     padding-left: 0;
 }
 
@@ -255,7 +254,7 @@ h1, h2, h3 {
     text-align: right;
     color: #b0697e;
     font-variant-numeric: tabular-nums;
-    width: 35%;
+    width: 25%;
     padding-right: 0;
 }
 </style>
