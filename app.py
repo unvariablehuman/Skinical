@@ -20,11 +20,11 @@ st.markdown("""
 
 html, body, [class*="css"] {
     font-family: 'DM Sans', sans-serif;
-    background-color: #faf9f6;
+    background-color: #ffffff;
     color: #2c2c2c;
 }
 
-.stApp { background-color: #faf9f6; }
+.stApp { background-color: #ffffff; }
 
 h1, h2, h3 {
     font-family: 'DM Serif Display', serif !important;
