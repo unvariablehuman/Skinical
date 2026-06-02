@@ -53,19 +53,20 @@ h1, h2, h3 {
 }
 
 .hero-card {
-    background: linear-gradient(135deg, #d15a75 0%, #e88fa5 100%);
+    background: linear-gradient(135deg, #ffffff 0%, #fce8ee 100%);
+    border: 1px solid #f5d0da;
     border-radius: 20px;
     padding: 2.8rem 2rem;
     text-align: center;
-    color: #ffffff;
+    color: #5c3c4b;
     margin-bottom: 2.5rem;
-    box-shadow: 0 8px 24px rgba(209, 90, 117, 0.12);
+    box-shadow: 0 8px 24px rgba(209, 90, 117, 0.04);
 }
 
 .hero-card-title {
     font-family: 'DM Serif Display', serif !important;
     font-size: 3.2rem;
-    color: #ffffff !important;
+    color: #d15a75 !important;
     margin: 0 0 0.4rem 0;
     line-height: 1.1;
     font-weight: 700;
@@ -73,7 +74,7 @@ h1, h2, h3 {
 
 .hero-card-sub {
     font-size: 1.05rem;
-    color: rgba(255, 255, 255, 0.9);
+    color: #5c3c4b;
     font-weight: 400;
     letter-spacing: 0.03em;
     margin-bottom: 1.4rem;
@@ -82,11 +83,11 @@ h1, h2, h3 {
 .hero-card-badge {
     display: inline-block;
     padding: 0.4rem 1.2rem;
-    background: rgba(255, 255, 255, 0.15);
-    border: 1px solid rgba(255, 255, 255, 0.3);
+    background: rgba(255, 255, 255, 0.6);
+    border: 1px solid #f5d0da;
     border-radius: 30px;
     font-size: 0.78rem;
-    color: #ffffff;
+    color: #d15a75;
     font-weight: 500;
     letter-spacing: 0.05em;
     text-transform: uppercase;
