@@ -568,8 +568,45 @@ def show_demo(model, scaler, bovw_kmeans):
                 label, prob, img_pre = predict(img_bgr, model, scaler, bovw_kmeans)
 
             with col2:
-                st.markdown("**Preprocessed Image**")
-                st.image(cv2.cvtColor(img_pre, cv2.COLOR_BGR2RGB), use_container_width=True)
+                st.markdown("**Feature Extraction Visualizer**")
+                tab1, tab2, tab3, tab4 = st.tabs([
+                    "✨ Preprocessed",
+                    "📐 HOG (Shape)",
+                    "🕸️ LBP (Texture)",
+                    "🎨 Color Histogram"
+                ])
+                
+                with tab1:
+                    st.image(cv2.cvtColor(img_pre, cv2.COLOR_BGR2RGB), use_container_width=True, caption="Preprocessed Image (CLAHE + Hair Removal)")
+                    
+                with tab2:
+                    from skimage.exposure import rescale_intensity
+                    gray_pre = cv2.cvtColor(img_pre, cv2.COLOR_BGR2GRAY)
+                    _, hog_img = hog(gray_pre, orientations=8, pixels_per_cell=(16, 16),
+                                     cells_per_block=(2, 2), block_norm='L2-Hys',
+                                     visualize=True, feature_vector=True)
+                    hog_rescaled = rescale_intensity(hog_img, in_range=(0, 10))
+                    st.image(hog_rescaled, use_container_width=True, caption="Histogram of Oriented Gradients (Shape & Edges)")
+                    
+                with tab3:
+                    gray_pre = cv2.cvtColor(img_pre, cv2.COLOR_BGR2GRAY)
+                    lbp_img = local_binary_pattern(gray_pre, P=24, R=3, method='uniform')
+                    lbp_norm = np.uint8((lbp_img / lbp_img.max()) * 255) if lbp_img.max() > 0 else np.zeros_like(lbp_img, dtype=np.uint8)
+                    st.image(lbp_norm, use_container_width=True, caption="Local Binary Pattern (Texture Micro-patterns)")
+                    
+                with tab4:
+                    r_hist, _ = np.histogram(img_pre[:,:,2], bins=256, range=(0, 256))
+                    g_hist, _ = np.histogram(img_pre[:,:,1], bins=256, range=(0, 256))
+                    b_hist, _ = np.histogram(img_pre[:,:,0], bins=256, range=(0, 256))
+                    
+                    import pandas as pd
+                    hist_df = pd.DataFrame({
+                        'Red Channel': r_hist,
+                        'Green Channel': g_hist,
+                        'Blue Channel': b_hist
+                    })
+                    st.line_chart(hist_df, color=["#ff4b4b", "#4beb4b", "#4b4bff"])
+                    st.caption("Intensity Distribution for RGB Channels")
 
             st.markdown('<hr class="divider">', unsafe_allow_html=True)
 
