@@ -18,13 +18,30 @@ st.markdown("""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap');
 
-html, body, [class*="css"] {
-    font-family: 'DM Sans', sans-serif;
+html {
     background: linear-gradient(135deg, #fff5f6 0%, #f3f0ff 100%) !important;
+}
+
+body {
+    font-family: 'DM Sans', sans-serif;
+    background: transparent !important;
     color: #2c2c2c;
 }
 
-.stApp { background: linear-gradient(135deg, #fff5f6 0%, #f3f0ff 100%) !important; }
+[class*="css"] {
+    font-family: 'DM Sans', sans-serif;
+}
+
+.stApp,
+.stAppViewContainer,
+.stAppViewContainer > section,
+.stAppViewContainer > section > div,
+.main,
+.main > div,
+.block-container {
+    background: transparent !important;
+}
+
 
 h1, h2, h3 {
     font-family: 'DM Serif Display', serif !important;
