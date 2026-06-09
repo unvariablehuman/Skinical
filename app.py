@@ -867,109 +867,109 @@ def _run_demo(mode, predict_fn, threshold):
                 with st.spinner("Analyzing and extracting features..."):
                     result = predict_fn(img_bgr)
 
-            # ── Classical result ───────────────────────────────────────────────
-            if mode == "classical":
-                label, prob, img_pre = result
-                with col2:
-                    st.markdown("**Feature Extraction Visualizer**")
-                    show_feature_visualizer(img_pre)
+                # ── Classical result ───────────────────────────────────────────────
+                if mode == "classical":
+                    label, prob, img_pre = result
+                    with col2:
+                        st.markdown("**Feature Extraction Visualizer**")
+                        show_feature_visualizer(img_pre)
 
-                st.markdown('<hr class="divider">', unsafe_allow_html=True)
-                is_mal  = label == "Malignant"
-                css_cls = "result-malignant" if is_mal else "result-benign"
-                emoji   = "⚠️" if is_mal else "✅"
-                color   = "#f87171" if is_mal else "#4ade80"
-                st.markdown(f"""
-                <div class="{css_cls}">
-                    <div class="result-label" style="color:{color}">{emoji} {label}</div>
-                    <div class="result-prob">Malignant probability: {prob:.1%}</div>
-                </div>
-                """, unsafe_allow_html=True)
+                    st.markdown('<hr class="divider">', unsafe_allow_html=True)
+                    is_mal  = label == "Malignant"
+                    css_cls = "result-malignant" if is_mal else "result-benign"
+                    emoji   = "⚠️" if is_mal else "✅"
+                    color   = "#f87171" if is_mal else "#4ade80"
+                    st.markdown(f"""
+                    <div class="{css_cls}">
+                        <div class="result-label" style="color:{color}">{emoji} {label}</div>
+                        <div class="result-prob">Malignant probability: {prob:.1%}</div>
+                    </div>
+                    """, unsafe_allow_html=True)
 
-                st.markdown("<br>", unsafe_allow_html=True)
-                c1, c2, c3 = st.columns(3)
-                with c1:
-                    st.markdown(f'<div class="metric-card"><div class="metric-label">Probability</div><div class="metric-value">{prob:.1%}</div></div>', unsafe_allow_html=True)
-                with c2:
-                    conf = abs(prob - 0.5) * 2
-                    st.markdown(f'<div class="metric-card"><div class="metric-label">Confidence</div><div class="metric-value">{conf:.1%}</div></div>', unsafe_allow_html=True)
-                with c3:
-                    st.markdown(f'<div class="metric-card"><div class="metric-label">Threshold</div><div class="metric-value">{threshold}</div></div>', unsafe_allow_html=True)
+                    st.markdown("<br>", unsafe_allow_html=True)
+                    c1, c2, c3 = st.columns(3)
+                    with c1:
+                        st.markdown(f'<div class="metric-card"><div class="metric-label">Probability</div><div class="metric-value">{prob:.1%}</div></div>', unsafe_allow_html=True)
+                    with c2:
+                        conf = abs(prob - 0.5) * 2
+                        st.markdown(f'<div class="metric-card"><div class="metric-label">Confidence</div><div class="metric-value">{conf:.1%}</div></div>', unsafe_allow_html=True)
+                    with c3:
+                        st.markdown(f'<div class="metric-card"><div class="metric-label">Threshold</div><div class="metric-value">{threshold}</div></div>', unsafe_allow_html=True)
 
-            # ── Hybrid result ──────────────────────────────────────────────────
-            else:
-                results_dict, img_pre = result
-                with col2:
-                    st.markdown("**Feature Extraction Visualizer**")
-                    show_feature_visualizer(img_pre)
+                # ── Hybrid result ──────────────────────────────────────────────────
+                else:
+                    results_dict, img_pre = result
+                    with col2:
+                        st.markdown("**Feature Extraction Visualizer**")
+                        show_feature_visualizer(img_pre)
 
-                st.markdown('<hr class="divider">', unsafe_allow_html=True)
-                st.markdown("#### 🔬 Hasil Komparasi 3 Classifier")
+                    st.markdown('<hr class="divider">', unsafe_allow_html=True)
+                    st.markdown("#### 🔬 Hasil Komparasi 3 Classifier")
 
-                # Majority vote
-                votes     = [v["label"] for v in results_dict.values()]
-                final_lbl = max(set(votes), key=votes.count)
-                avg_prob  = np.mean([v["prob"] for v in results_dict.values()])
-                is_mal    = final_lbl == "Malignant"
-                css_cls   = "result-malignant" if is_mal else "result-benign"
-                emoji     = "⚠️" if is_mal else "✅"
-                color     = "#f87171" if is_mal else "#4ade80"
+                    # Majority vote
+                    votes     = [v["label"] for v in results_dict.values()]
+                    final_lbl = max(set(votes), key=votes.count)
+                    avg_prob  = np.mean([v["prob"] for v in results_dict.values()])
+                    is_mal    = final_lbl == "Malignant"
+                    css_cls   = "result-malignant" if is_mal else "result-benign"
+                    emoji     = "⚠️" if is_mal else "✅"
+                    color     = "#f87171" if is_mal else "#4ade80"
 
-                st.markdown(f"""
-                <div class="{css_cls}">
-                    <div class="result-label" style="color:{color}">{emoji} {final_lbl}</div>
-                    <div class="result-prob">Majority vote dari 3 model &nbsp;·&nbsp; Rata-rata prob: {avg_prob:.1%}</div>
-                </div>
-                """, unsafe_allow_html=True)
+                    st.markdown(f"""
+                    <div class="{css_cls}">
+                        <div class="result-label" style="color:{color}">{emoji} {final_lbl}</div>
+                        <div class="result-prob">Majority vote dari 3 model &nbsp;·&nbsp; Rata-rata prob: {avg_prob:.1%}</div>
+                    </div>
+                    """, unsafe_allow_html=True)
 
-                st.markdown("<br>", unsafe_allow_html=True)
+                    st.markdown("<br>", unsafe_allow_html=True)
 
-                # Comparison table
-                best_prob = max(results_dict.values(), key=lambda x: x["prob"])["prob"]
-                rows = ""
-                for clf_name, res in results_dict.items():
-                    badge_cls = "badge-mal" if res["label"] == "Malignant" else "badge-ben"
-                    prob_cls  = "best" if res["prob"] == best_prob else ""
-                    rows += f"""
-                    <tr>
-                        <td><strong>{clf_name}</strong></td>
-                        <td><span class="{badge_cls}">{res["label"]}</span></td>
-                        <td class="{prob_cls}">{res["prob"]:.4f}</td>
-                        <td class="{prob_cls}">{res["prob"]:.1%}</td>
-                    </tr>"""
-
-                st.markdown(f"""
-                <table class="compare-table">
-                    <thead>
+                    # Comparison table
+                    best_prob = max(results_dict.values(), key=lambda x: x["prob"])["prob"]
+                    rows = ""
+                    for clf_name, res in results_dict.items():
+                        badge_cls = "badge-mal" if res["label"] == "Malignant" else "badge-ben"
+                        prob_cls  = "best" if res["prob"] == best_prob else ""
+                        rows += f"""
                         <tr>
-                            <th>Classifier</th>
-                            <th>Prediksi</th>
-                            <th>Raw Prob</th>
-                            <th>Confidence</th>
-                        </tr>
-                    </thead>
-                    <tbody>{rows}</tbody>
-                </table>
+                            <td><strong>{clf_name}</strong></td>
+                            <td><span class="{badge_cls}">{res["label"]}</span></td>
+                            <td class="{prob_cls}">{res["prob"]:.4f}</td>
+                            <td class="{prob_cls}">{res["prob"]:.1%}</td>
+                        </tr>"""
+
+                    st.markdown(f"""
+                    <table class="compare-table">
+                        <thead>
+                            <tr>
+                                <th>Classifier</th>
+                                <th>Prediksi</th>
+                                <th>Raw Prob</th>
+                                <th>Confidence</th>
+                            </tr>
+                        </thead>
+                        <tbody>{rows}</tbody>
+                    </table>
+                    """, unsafe_allow_html=True)
+
+                    st.markdown("<br>", unsafe_allow_html=True)
+                    c1, c2, c3 = st.columns(3)
+                    with c1:
+                        st.markdown(f'<div class="metric-card"><div class="metric-label">Avg Probability</div><div class="metric-value">{avg_prob:.1%}</div></div>', unsafe_allow_html=True)
+                    with c2:
+                        conf = abs(avg_prob - 0.5) * 2
+                        st.markdown(f'<div class="metric-card"><div class="metric-label">Avg Confidence</div><div class="metric-value">{conf:.1%}</div></div>', unsafe_allow_html=True)
+                    with c3:
+                        agree = "✓ Semua Setuju" if len(set(votes)) == 1 else f"⚡ {votes.count('Malignant')}–{votes.count('Benign')} Split"
+                        st.markdown(f'<div class="metric-card"><div class="metric-label">Konsensus</div><div class="metric-value" style="font-size:1.1rem;">{agree}</div></div>', unsafe_allow_html=True)
+
+                st.markdown("""
+                <div class="warning-box">
+                    ⚠️ <strong>Disclaimer:</strong> This tool is for educational purposes only
+                    and is not a substitute for professional medical diagnosis.
+                    Always consult a qualified dermatologist.
+                </div>
                 """, unsafe_allow_html=True)
-
-                st.markdown("<br>", unsafe_allow_html=True)
-                c1, c2, c3 = st.columns(3)
-                with c1:
-                    st.markdown(f'<div class="metric-card"><div class="metric-label">Avg Probability</div><div class="metric-value">{avg_prob:.1%}</div></div>', unsafe_allow_html=True)
-                with c2:
-                    conf = abs(avg_prob - 0.5) * 2
-                    st.markdown(f'<div class="metric-card"><div class="metric-label">Avg Confidence</div><div class="metric-value">{conf:.1%}</div></div>', unsafe_allow_html=True)
-                with c3:
-                    agree = "✓ Semua Setuju" if len(set(votes)) == 1 else f"⚡ {votes.count('Malignant')}–{votes.count('Benign')} Split"
-                    st.markdown(f'<div class="metric-card"><div class="metric-label">Konsensus</div><div class="metric-value" style="font-size:1.1rem;">{agree}</div></div>', unsafe_allow_html=True)
-
-            st.markdown("""
-            <div class="warning-box">
-                ⚠️ <strong>Disclaimer:</strong> This tool is for educational purposes only
-                and is not a substitute for professional medical diagnosis.
-                Always consult a qualified dermatologist.
-            </div>
-            """, unsafe_allow_html=True)
 
     else:
         st.markdown("""
