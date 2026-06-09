@@ -393,6 +393,55 @@ def preprocess(img_bgr, size):
     img = apply_clahe(img)
     return cv2.resize(img, size)
 
+def is_skin_lesion_image(img_bgr):
+    # Convert to HSV color space
+    hsv = cv2.cvtColor(img_bgr, cv2.COLOR_BGR2HSV)
+    total_pixels = img_bgr.shape[0] * img_bgr.shape[1]
+    
+    # 1. Skin color range in HSV:
+    # Skin Hue: 0-25 or 160-180
+    # Saturation: 15-175 (excludes grayscale backgrounds, white paper, etc.)
+    # Value: 40-255 (excludes pitch black/extremely dark images)
+    skin_mask1 = cv2.inRange(hsv, np.array([0, 15, 40]), np.array([25, 175, 255]))
+    skin_mask2 = cv2.inRange(hsv, np.array([160, 15, 40]), np.array([180, 175, 255]))
+    skin_mask = cv2.bitwise_or(skin_mask1, skin_mask2)
+    
+    # Lesion color range (often darker brown, black, or reddish)
+    # Hue: 0-30 or 160-180, Saturation: 15-255, Value: 15-90
+    lesion_mask1 = cv2.inRange(hsv, np.array([0, 15, 15]), np.array([30, 255, 90]))
+    lesion_mask2 = cv2.inRange(hsv, np.array([160, 15, 15]), np.array([180, 255, 90]))
+    lesion_mask = cv2.bitwise_or(lesion_mask1, lesion_mask2)
+    
+    # Combined skin and lesion mask
+    combined_mask = cv2.bitwise_or(skin_mask, lesion_mask)
+    matching_pixels = cv2.countNonZero(combined_mask)
+    matching_pct = matching_pixels / total_pixels
+    
+    # 2. Check for dominant non-skin colors (such as deep green or deep blue)
+    # Green Hue: 35-85, S: 30-255, V: 30-255
+    # Blue Hue: 90-150, S: 30-255, V: 30-255
+    green_mask = cv2.inRange(hsv, np.array([35, 30, 30]), np.array([85, 255, 255]))
+    blue_mask = cv2.inRange(hsv, np.array([90, 30, 30]), np.array([150, 255, 255]))
+    non_skin_mask = cv2.bitwise_or(green_mask, blue_mask)
+    non_skin_pixels = cv2.countNonZero(non_skin_mask)
+    non_skin_pct = non_skin_pixels / total_pixels
+    
+    # If the image is dominated by green or blue (e.g. leaves, trees, water, blue clothing), reject it
+    if non_skin_pct > 0.15:
+        return False, f"Gambar terdeteksi mengandung warna non-kulit yang dominan (hijau/biru: {non_skin_pct:.1%})."
+        
+    # If less than 35% of the image matches skin/lesion colors, it is likely not a skin lesion image
+    if matching_pct < 0.35:
+        return False, f"Gambar tidak didominasi oleh warna kulit atau lesi (hanya {matching_pct:.1%} kecocokan warna kulit)."
+        
+    # 3. Check for extremely low detail (like a plain color image, document with text, etc.)
+    gray = cv2.cvtColor(img_bgr, cv2.COLOR_BGR2GRAY)
+    laplacian_var = cv2.Laplacian(gray, cv2.CV_64F).var()
+    if laplacian_var < 8.0:
+        return False, "Gambar terlalu polos atau tidak memiliki detail tekstur yang cukup."
+        
+    return True, "Valid"
+
 # ── Classical feature extraction ──────────────────────────────────────────────
 def extract_lbp(gray, P=24, R=3, n_bins=64):
     lbp  = local_binary_pattern(gray, P=P, R=R, method="uniform")
@@ -692,8 +741,10 @@ def _run_demo(mode, predict_fn, threshold):
         if uploaded:
             file_bytes = np.asarray(bytearray(uploaded.read()), dtype=np.uint8)
             img_bgr    = cv2.imdecode(file_bytes, cv2.IMREAD_COLOR)
+            is_valid, msg = is_skin_lesion_image(img_bgr)
         else:
             img_bgr = cv2.imread(st.session_state[f"selected_sample_{mode}"])
+            is_valid, msg = True, "Valid"
 
         col1, col2 = st.columns(2)
         with col1:
@@ -702,9 +753,12 @@ def _run_demo(mode, predict_fn, threshold):
 
         st.markdown("<br>", unsafe_allow_html=True)
 
-        if st.button("Analyze Lesion", type="primary", use_container_width=True, key=f"analyze_{mode}"):
-            with st.spinner("Analyzing and extracting features..."):
-                result = predict_fn(img_bgr)
+        if not is_valid:
+            st.error(f"❌ **Gambar Tidak Valid:** {msg} Harap upload gambar dermoscopic lesi kulit yang benar.")
+        else:
+            if st.button("Analyze Lesion", type="primary", use_container_width=True, key=f"analyze_{mode}"):
+                with st.spinner("Analyzing and extracting features..."):
+                    result = predict_fn(img_bgr)
 
             # ── Classical result ───────────────────────────────────────────────
             if mode == "classical":
