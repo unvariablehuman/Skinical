@@ -10,3 +10,4 @@ pandas
 torch
 torchvision
 timm
+lightgbm
