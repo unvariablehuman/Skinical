@@ -551,7 +551,7 @@ def show_description():
 
     **🔵 Classical ML** — Dilatih menggunakan dataset [ISIC 2017](https://challenge.isic-archive.com/data/#2017). Pipeline menggunakan ekstraksi fitur tradisional (LBP, GLCM, HOG, LAB/HSV Histogram, BoVW) dengan Random Forest sebagai classifier.
 
-    **🟣 Hybrid DL + Classical ML** — Dilatih menggunakan dataset [Fanconi (Malignant vs Benign)](https://www.kaggle.com/datasets/fanconic/skin-cancer-malignant-vs-benign). Menggabungkan deep features dari EfficientNetB3 (1280-dim) dengan classical features (LBP + HOG + LAB) lalu diklasifikasikan menggunakan SVM, LightGBM, dan Random Forest.
+    **🟣 Hybrid DL + Classical ML** — Menggabungkan deep features dari EfficientNetB3 (1280-dim) dengan classical features (LBP + HOG + LAB) lalu diklasifikasikan menggunakan SVM, LightGBM, dan Random Forest.
 
     ---
 
@@ -623,7 +623,7 @@ def show_demo_hybrid(classifiers, scaler, pca, effnet):
     st.markdown("""
     <div class="hero-card">
         <div class="hero-card-title">Skinical</div>
-        <div class="hero-card-sub">Hybrid DL + Classical ML &nbsp;·&nbsp; Fanconi Dataset &nbsp;·&nbsp; EfficientNetB3</div>
+        <div class="hero-card-sub">Hybrid DL + Classical ML &nbsp;·&nbsp; EfficientNetB3</div>
         <div class="hero-card-badge">Powered by EfficientNetB3 + Classical Features</div>
     </div>
     """, unsafe_allow_html=True)
