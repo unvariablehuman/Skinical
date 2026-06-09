@@ -820,13 +820,6 @@ def _run_demo(mode, predict_fn, threshold):
 
 # ── Load models ───────────────────────────────────────────────────────────────
 try:
-    classical_model, classical_scaler, bovw_kmeans = load_classical_models()
-    classical_ok = True
-except Exception as e:
-    classical_ok  = False
-    classical_err = str(e)
-
-try:
     hybrid_classifiers, hybrid_scaler, hybrid_pca, hybrid_effnet = load_hybrid_models()
     hybrid_ok = True
 except Exception as e:
@@ -839,17 +832,12 @@ with st.sidebar:
     st.markdown('<div class="sidebar-tagline">— Skin Lesion Classifier —</div>', unsafe_allow_html=True)
     page = st.radio(
         "Navigasi",
-        ["Deskripsi", "Demo Classical ML", "Demo Hybrid DL"],
+        ["Deskripsi", "Demo Hybrid DL"],
         label_visibility="collapsed"
     )
 
 if page == "Deskripsi":
     show_description()
-elif page == "Demo Classical ML":
-    if classical_ok:
-        show_demo_classical(classical_model, classical_scaler, bovw_kmeans)
-    else:
-        st.error(f"Gagal load Classical ML model: {classical_err}")
 elif page == "Demo Hybrid DL":
     if hybrid_ok:
         show_demo_hybrid(hybrid_classifiers, hybrid_scaler, hybrid_pca, hybrid_effnet)
