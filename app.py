@@ -444,88 +444,94 @@ def is_skin_lesion_image_heuristic(img_bgr):
     return True, "Valid"
 
 def is_skin_lesion_image(img_bgr):
-    # Try Gemini first if key exists
-    gemini_key = st.secrets.get("GEMINI_API_KEY", None)
-    anthropic_key = st.secrets.get("ANTHROPIC_API_KEY", None)
-    
-    if gemini_key:
-        try:
-            import google.generativeai as genai
-            import json
-            genai.configure(api_key=gemini_key)
-            # Convert BGR to RGB and PIL
-            img_rgb = cv2.cvtColor(img_bgr, cv2.COLOR_BGR2RGB)
-            pil_img = Image.fromarray(img_rgb)
+    try:
+        if img_bgr is None:
+            return True, "Valid (Bypass karena gambar kosong)"
             
-            model = genai.GenerativeModel("gemini-2.5-flash")
-            prompt = (
-                "Analyze this image. Determine if it is a medical image of a skin lesion, "
-                "mole, rash, skin cancer, shingles, or any other dermatological skin condition on human skin. "
-                "Respond ONLY with a JSON object containing:\n"
-                '{\n  "is_skin_lesion": true/false,\n  "reason": "Penjelasan singkat dalam bahasa Indonesia"\n}'
-            )
-            response = model.generate_content([prompt, pil_img])
-            text = response.text.strip()
-            if text.startswith("```json"):
-                text = text[7:]
-            if text.endswith("```"):
-                text = text[:-3]
-            res = json.loads(text.strip())
-            return bool(res.get("is_skin_lesion")), res.get("reason", "")
-        except Exception as e:
-            pass # Fall through
-            
-    if anthropic_key:
-        try:
-            from anthropic import Anthropic
-            import json
-            import base64
-            client = Anthropic(api_key=anthropic_key)
-            _, buffer = cv2.imencode(".jpg", img_bgr)
-            img_base64 = base64.b64encode(buffer).decode("utf-8")
-            
-            prompt = (
-                "Analyze this image. Determine if it is a medical image of a skin lesion, "
-                "mole, rash, skin cancer, shingles, or any other dermatological skin condition on human skin. "
-                "Respond ONLY with a JSON object containing:\n"
-                '{\n  "is_skin_lesion": true/false,\n  "reason": "Penjelasan singkat dalam bahasa Indonesia"\n}'
-            )
-            
-            message = client.messages.create(
-                model="claude-3-5-sonnet-20241022",
-                max_tokens=150,
-                messages=[
-                    {
-                        "role": "user",
-                        "content": [
-                            {
-                                "type": "image",
-                                "source": {
-                                    "type": "base64",
-                                    "media_type": "image/jpeg",
-                                    "data": img_base64,
+        # Try Gemini first if key exists
+        gemini_key = st.secrets.get("GEMINI_API_KEY", None)
+        anthropic_key = st.secrets.get("ANTHROPIC_API_KEY", None)
+        
+        if gemini_key:
+            try:
+                import google.generativeai as genai
+                import json
+                genai.configure(api_key=gemini_key)
+                # Convert BGR to RGB and PIL
+                img_rgb = cv2.cvtColor(img_bgr, cv2.COLOR_BGR2RGB)
+                pil_img = Image.fromarray(img_rgb)
+                
+                model = genai.GenerativeModel("gemini-2.5-flash")
+                prompt = (
+                    "Analyze this image. Determine if it is a medical image of a skin lesion, "
+                    "mole, rash, skin cancer, shingles, or any other dermatological skin condition on human skin. "
+                    "Respond ONLY with a JSON object containing:\n"
+                    '{\n  "is_skin_lesion": true/false,\n  "reason": "Penjelasan singkat dalam bahasa Indonesia"\n}'
+                )
+                response = model.generate_content([prompt, pil_img])
+                text = response.text.strip()
+                if text.startswith("```json"):
+                    text = text[7:]
+                if text.endswith("```"):
+                    text = text[:-3]
+                res = json.loads(text.strip())
+                return bool(res.get("is_skin_lesion")), res.get("reason", "")
+            except Exception as e:
+                pass # Fall through
+                
+        if anthropic_key:
+            try:
+                from anthropic import Anthropic
+                import json
+                import base64
+                client = Anthropic(api_key=anthropic_key)
+                _, buffer = cv2.imencode(".jpg", img_bgr)
+                img_base64 = base64.b64encode(buffer).decode("utf-8")
+                
+                prompt = (
+                    "Analyze this image. Determine if it is a medical image of a skin lesion, "
+                    "mole, rash, skin cancer, shingles, or any other dermatological skin condition on human skin. "
+                    "Respond ONLY with a JSON object containing:\n"
+                    '{\n  "is_skin_lesion": true/false,\n  "reason": "Penjelasan singkat dalam bahasa Indonesia"\n}'
+                )
+                
+                message = client.messages.create(
+                    model="claude-3-5-sonnet-20241022",
+                    max_tokens=150,
+                    messages=[
+                        {
+                            "role": "user",
+                            "content": [
+                                {
+                                    "type": "image",
+                                    "source": {
+                                        "type": "base64",
+                                        "media_type": "image/jpeg",
+                                        "data": img_base64,
+                                    },
                                 },
-                            },
-                            {
-                                "type": "text",
-                                "text": prompt
-                            }
-                        ],
-                    }
-                ],
-            )
-            text = message.content[0].text.strip()
-            if text.startswith("```json"):
-                text = text[7:]
-            if text.endswith("```"):
-                text = text[:-3]
-            res = json.loads(text.strip())
-            return bool(res.get("is_skin_lesion")), res.get("reason", "")
-        except Exception as e:
-            pass # Fall through
-            
-    # Default fallback: relaxed heuristic CV check
-    return is_skin_lesion_image_heuristic(img_bgr)
+                                {
+                                    "type": "text",
+                                    "text": prompt
+                                }
+                            ],
+                        }
+                    ],
+                )
+                text = message.content[0].text.strip()
+                if text.startswith("```json"):
+                    text = text[7:]
+                if text.endswith("```"):
+                    text = text[:-3]
+                res = json.loads(text.strip())
+                return bool(res.get("is_skin_lesion")), res.get("reason", "")
+            except Exception as e:
+                pass # Fall through
+                
+        # Default fallback: relaxed heuristic CV check
+        return is_skin_lesion_image_heuristic(img_bgr)
+    except Exception as e:
+        return True, f"Bypass validasi karena error internal: {str(e)}"
 
 # ── Classical feature extraction ──────────────────────────────────────────────
 def extract_lbp(gray, P=24, R=3, n_bins=64):
@@ -815,6 +821,9 @@ def _run_demo(mode, predict_fn, threshold):
     has_image = uploaded is not None or st.session_state[f"selected_sample_{mode}"] is not None
 
     if has_image:
+        is_valid = True
+        msg = "Valid"
+
         if st.session_state[f"selected_sample_{mode}"]:
             filename = Path(st.session_state[f"selected_sample_{mode}"]).name
             friendly = "Sample 1" if "sample_1" in filename else "Sample 2" if "sample_2" in filename else "Sample 3"
@@ -824,6 +833,7 @@ def _run_demo(mode, predict_fn, threshold):
                 st.rerun()
 
         if uploaded:
+            uploaded.seek(0)  # Reset pointer to enable multiple reads on reruns
             file_bytes = np.asarray(bytearray(uploaded.read()), dtype=np.uint8)
             img_bgr    = cv2.imdecode(file_bytes, cv2.IMREAD_COLOR)
             with st.spinner("Memvalidasi gambar..."):
