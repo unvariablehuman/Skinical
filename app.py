@@ -930,14 +930,17 @@ def _run_demo(mode, predict_fn, threshold):
                     for clf_name, res in results_dict.items():
                         badge_cls = "badge-mal" if res["label"] == "Malignant" else "badge-ben"
                         prob_cls  = "best" if res["prob"] == best_prob else ""
+                        
+                        # Confidence is the probability of the predicted class
+                        display_conf = res["prob"] if res["label"] == "Malignant" else (1.0 - res["prob"])
+                        
                         rows += f"""
                         <tr>
                             <td><strong>{clf_name}</strong></td>
                             <td><span class="{badge_cls}">{res["label"]}</span></td>
                             <td class="{prob_cls}">{res["prob"]:.4f}</td>
-                            <td class="{prob_cls}">{res["prob"]:.1%}</td>
+                            <td>{display_conf:.1%}</td>
                         </tr>"""
-
                     st.markdown(f"""
                     <table class="compare-table">
                         <thead>
