@@ -428,7 +428,7 @@ def is_skin_lesion_image_heuristic(img_bgr):
     non_skin_pct = non_skin_pixels / total_pixels
     
     # If the image is dominated by green or blue (e.g. leaves, trees, water, blue clothing), reject it
-    if non_skin_pct > 0.15:
+    if non_skin_pct > 0.25:
         return False, f"Gambar terdeteksi mengandung warna non-kulit yang dominan (hijau/biru: {non_skin_pct:.1%})."
         
     # If less than 35% of the image matches skin/lesion colors, it is likely not a skin lesion image
