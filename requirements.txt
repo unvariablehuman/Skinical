@@ -11,3 +11,5 @@ torch
 torchvision
 timm
 lightgbm
+google-generativeai
+anthropic

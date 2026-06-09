@@ -393,7 +393,7 @@ def preprocess(img_bgr, size):
     img = apply_clahe(img)
     return cv2.resize(img, size)
 
-def is_skin_lesion_image(img_bgr):
+def is_skin_lesion_image_heuristic(img_bgr):
     # Convert to HSV color space
     hsv = cv2.cvtColor(img_bgr, cv2.COLOR_BGR2HSV)
     total_pixels = img_bgr.shape[0] * img_bgr.shape[1]
@@ -418,10 +418,11 @@ def is_skin_lesion_image(img_bgr):
     matching_pct = matching_pixels / total_pixels
     
     # 2. Check for dominant non-skin colors (such as deep green or deep blue)
-    # Green Hue: 35-85, S: 30-255, V: 30-255
-    # Blue Hue: 90-150, S: 30-255, V: 30-255
-    green_mask = cv2.inRange(hsv, np.array([35, 30, 30]), np.array([85, 255, 255]))
-    blue_mask = cv2.inRange(hsv, np.array([90, 30, 30]), np.array([150, 255, 255]))
+    # Relaxed thresholds from 30 to 75 so that gray walls/shadows are ignored
+    # Green Hue: 35-85, S: 75-255, V: 40-255
+    # Blue Hue: 90-150, S: 75-255, V: 40-255
+    green_mask = cv2.inRange(hsv, np.array([35, 75, 40]), np.array([85, 255, 255]))
+    blue_mask = cv2.inRange(hsv, np.array([90, 75, 40]), np.array([150, 255, 255]))
     non_skin_mask = cv2.bitwise_or(green_mask, blue_mask)
     non_skin_pixels = cv2.countNonZero(non_skin_mask)
     non_skin_pct = non_skin_pixels / total_pixels
@@ -441,6 +442,90 @@ def is_skin_lesion_image(img_bgr):
         return False, "Gambar terlalu polos atau tidak memiliki detail tekstur yang cukup."
         
     return True, "Valid"
+
+def is_skin_lesion_image(img_bgr):
+    # Try Gemini first if key exists
+    gemini_key = st.secrets.get("GEMINI_API_KEY", None)
+    anthropic_key = st.secrets.get("ANTHROPIC_API_KEY", None)
+    
+    if gemini_key:
+        try:
+            import google.generativeai as genai
+            import json
+            genai.configure(api_key=gemini_key)
+            # Convert BGR to RGB and PIL
+            img_rgb = cv2.cvtColor(img_bgr, cv2.COLOR_BGR2RGB)
+            pil_img = Image.fromarray(img_rgb)
+            
+            model = genai.GenerativeModel("gemini-2.5-flash")
+            prompt = (
+                "Analyze this image. Determine if it is a medical image of a skin lesion, "
+                "mole, rash, skin cancer, shingles, or any other dermatological skin condition on human skin. "
+                "Respond ONLY with a JSON object containing:\n"
+                '{\n  "is_skin_lesion": true/false,\n  "reason": "Penjelasan singkat dalam bahasa Indonesia"\n}'
+            )
+            response = model.generate_content([prompt, pil_img])
+            text = response.text.strip()
+            if text.startswith("```json"):
+                text = text[7:]
+            if text.endswith("```"):
+                text = text[:-3]
+            res = json.loads(text.strip())
+            return bool(res.get("is_skin_lesion")), res.get("reason", "")
+        except Exception as e:
+            pass # Fall through
+            
+    if anthropic_key:
+        try:
+            from anthropic import Anthropic
+            import json
+            import base64
+            client = Anthropic(api_key=anthropic_key)
+            _, buffer = cv2.imencode(".jpg", img_bgr)
+            img_base64 = base64.b64encode(buffer).decode("utf-8")
+            
+            prompt = (
+                "Analyze this image. Determine if it is a medical image of a skin lesion, "
+                "mole, rash, skin cancer, shingles, or any other dermatological skin condition on human skin. "
+                "Respond ONLY with a JSON object containing:\n"
+                '{\n  "is_skin_lesion": true/false,\n  "reason": "Penjelasan singkat dalam bahasa Indonesia"\n}'
+            )
+            
+            message = client.messages.create(
+                model="claude-3-5-sonnet-20241022",
+                max_tokens=150,
+                messages=[
+                    {
+                        "role": "user",
+                        "content": [
+                            {
+                                "type": "image",
+                                "source": {
+                                    "type": "base64",
+                                    "media_type": "image/jpeg",
+                                    "data": img_base64,
+                                },
+                            },
+                            {
+                                "type": "text",
+                                "text": prompt
+                            }
+                        ],
+                    }
+                ],
+            )
+            text = message.content[0].text.strip()
+            if text.startswith("```json"):
+                text = text[7:]
+            if text.endswith("```"):
+                text = text[:-3]
+            res = json.loads(text.strip())
+            return bool(res.get("is_skin_lesion")), res.get("reason", "")
+        except Exception as e:
+            pass # Fall through
+            
+    # Default fallback: relaxed heuristic CV check
+    return is_skin_lesion_image_heuristic(img_bgr)
 
 # ── Classical feature extraction ──────────────────────────────────────────────
 def extract_lbp(gray, P=24, R=3, n_bins=64):
@@ -741,7 +826,8 @@ def _run_demo(mode, predict_fn, threshold):
         if uploaded:
             file_bytes = np.asarray(bytearray(uploaded.read()), dtype=np.uint8)
             img_bgr    = cv2.imdecode(file_bytes, cv2.IMREAD_COLOR)
-            is_valid, msg = is_skin_lesion_image(img_bgr)
+            with st.spinner("Memvalidasi gambar..."):
+                is_valid, msg = is_skin_lesion_image(img_bgr)
         else:
             img_bgr = cv2.imread(st.session_state[f"selected_sample_{mode}"])
             is_valid, msg = True, "Valid"
@@ -754,7 +840,18 @@ def _run_demo(mode, predict_fn, threshold):
         st.markdown("<br>", unsafe_allow_html=True)
 
         if not is_valid:
-            st.error(f"❌ **Gambar Tidak Valid:** {msg} Harap upload gambar dermoscopic lesi kulit yang benar.")
+            st.markdown(f"""
+            <div style="background:#fff1f2;border:1px solid #fda4af;border-radius:12px;
+                        padding:1.5rem;text-align:center;margin-bottom:1rem;">
+                <div style="font-size:2rem;margin-bottom:0.5rem;">🚫</div>
+                <div style="font-family:'DM Serif Display',serif;font-size:1.3rem;
+                            color:#be123c;margin-bottom:0.4rem;">Gambar Tidak Valid</div>
+                <div style="font-size:0.9rem;color:#9f1239;">{msg}</div>
+                <div style="font-size:0.8rem;color:#b0697e;margin-top:0.8rem;">
+                    Harap upload foto lesi kulit, mole, ruam, atau gambar dermoskopi yang benar.
+                </div>
+            </div>
+            """, unsafe_allow_html=True)
         else:
             if st.button("Analyze Lesion", type="primary", use_container_width=True, key=f"analyze_{mode}"):
                 with st.spinner("Analyzing and extracting features..."):
