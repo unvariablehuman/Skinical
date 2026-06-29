@@ -1,106 +1,112 @@
 # 🔬 Skinical
 
-**Skin Lesion Binary Classification using Classical Machine Learning**  
+**Hybrid Skin Lesion Classification using EfficientNetB3 and Handcrafted Feature Fusion**
 COMP7116001 — Computer Vision · BINUS University · 2026
+
+**Final Project — Group 5**
+
+**Supervisor:**
+Dr. Fiqri Ramadhan Tambunan
 
 ---
 
 ## Overview
 
-Skinical is a classical ML pipeline for binary skin lesion classification (malignant vs benign) built on the **ISIC 2017** dermoscopic image dataset. The project is part of the Computer Vision final project at BINUS University, with a strict constraint of **no deep learning**.
+Skinical is a hybrid framework for binary skin lesion classification using dermoscopic images from the **ISIC 2017 Challenge dataset**. This project was developed as the final project for the Computer Vision course at BINUS University.
 
-The pipeline integrates hair removal, contrast enhancement, multi-feature handcrafted extraction, class imbalance handling, and threshold-tuned evaluation — following best practices from recent dermatological ML literature.
+The proposed framework combines deep feature representations extracted from **EfficientNetB3** with handcrafted visual descriptors, including **Local Binary Patterns (LBP), Histogram of Oriented Gradients (HOG), and LAB color histograms**. The integration of semantic deep features and explicit visual descriptors aims to improve the discrimination capability between benign and malignant skin lesions.
+
+---
+
+## Team Members — Group 5
+
+| Name                       | Contribution                                                        |
+| -------------------------- | ------------------------------------------------------------------- |
+| Aaron Nikolas Tondosaputro | Results and Analysis                                                |
+| Nadya Salsabila            | Introduction and Related Work                                       |
+| Sabrina Arfanindia Devi    | Methodology, Hybrid Pipeline, Feature Extraction, Model Development |
+| Albani Kalam Haq           | Discussion, Limitations, and Streamlit Deployment                   |
+| Kristian Novan             | Video Demonstration                                                 |
+| Justin Lysander Setiawan   | Conclusion and Future Work                                          |
+
+**Supervisor:**
+Dr. Fiqri Ramadhan Tambunan
 
 ---
 
 ## Pipeline
 
 ```
-Raw Image
-    │
-    ▼
-Hair Removal (DullRazor-lite)
-    │
-    ▼
-CLAHE Enhancement
-    │
-    ▼
-Resize → 256×256
-    │
-    ▼
-Feature Extraction
-  ├── LBP   (Local Binary Patterns)       → 64 features
-  ├── GLCM  (Haralick Texture)            → 13 features
-  ├── HOG   (Histogram of Gradients)      → variable
-  ├── LAB   (Color Histogram)             → 96 features
-  ├── HSV   (Color Histogram)             → 96 features
-  └── BoVW  (ORB + Bag of Visual Words)   → 50 features
-    │
-    ▼
-Z-score Normalization (StandardScaler)
-    │
-    ▼
-Random Oversampling (minority class)
-    │
-    ▼
-Random Forest Classifier
-    │
-    ▼
-Threshold Tuning (0.30)
-    │
-    ▼
-Prediction: Benign / Malignant
+Dermoscopic Image
+        │
+        ▼
+Preprocessing
+ ├── Hair Removal (DullRazor)
+ ├── CLAHE Enhancement (LAB Color Space)
+ └── Resize → 224×224
+        │
+        ▼
+Dual Feature Extraction
+ ├── EfficientNetB3 Deep Features
+ │       └── 1,536 dimensions
+ │
+ └── Handcrafted Features
+         ├── LBP
+         ├── HOG
+         └── LAB Histogram
+             └── 6,244 dimensions
+        │
+        ▼
+Feature Fusion
+        │
+        ▼
+StandardScaler Normalization
+        │
+        ▼
+PCA Dimensionality Reduction
+        │
+        ▼
+Classifier
+ ├── SVM
+ ├── LightGBM
+ └── Random Forest
+        │
+        ▼
+Prediction
+Benign / Malignant
 ```
 
 ---
 
 ## Results
 
-Evaluated on ISIC 2017 test set (600 images, 117 malignant / 483 benign):
+Evaluation was conducted on the **ISIC 2017 Challenge test set**.
 
-| Metric | Value |
-|---|---|
-| **ROC-AUC** | **0.736** |
-| Recall Malignant | 0.68 |
-| F1 Malignant | 0.47 |
-| MCC | 0.315 |
-| Accuracy | 0.71 |
+| Classifier    | Accuracy  | F1-score  | ROC-AUC   |
+| ------------- | --------- | --------- | --------- |
+| Random Forest | 80.5%     | 0.775     | 0.903     |
+| LightGBM      | 83.8%     | 0.818     | 0.920     |
+| **SVM**       | **84.4%** | **0.828** | **0.923** |
 
-Two operating thresholds are reported:
-
-| Mode | Threshold | Recall Malignant | F1 Malignant | Use Case |
-|---|---|---|---|---|
-| Balanced | 0.30 | 0.68 | 0.47 | General screening |
-| High Sensitivity | 0.15 | ~0.92 | ~0.35 | Clinical safety |
-
-> AUC-ROC is the primary metric. Accuracy is not used as the primary metric due to 4.3:1 class imbalance.
+The hybrid SVM classifier achieved the best performance with the highest ROC-AUC value of **0.923**, demonstrating the effectiveness of combining deep representations with handcrafted visual descriptors.
 
 ---
 
 ## Dataset
 
-**ISIC 2017 Skin Lesion Analysis Toward Melanoma Detection**
+**ISIC 2017 Challenge Dataset**
 
-| Split | Total | Malignant | Benign |
-|---|---|---|---|
-| Train | 2,000 | 374 (18.7%) | 1,626 (81.3%) |
-| Validation | 150 | 30 | 120 |
-| Test | 600 | 117 | 483 |
+The dataset contains dermoscopic images categorized into two classes:
 
-Labels: `melanoma == 1` → malignant, otherwise benign.
+* Benign lesions
+* Malignant lesions
 
-Dataset available on [ISIC CHALLENGE 2017](https://challenge.isic-archive.com/data/#2017).
+Dataset source:
 
----
-
-## References
-
-- Pattnaik et al. (2025). *Skin Lesion Image Classification With Tree-Based Ensembles: Benchmarking Random Forest and Gradient Boosting.* Cureus 17(9): e92432.
-- Thomas, E.K. (2021). *Prediction of Malignant Melanoma using Machine Learning.* MSc Thesis, National College of Ireland.
-- ISIC 2017 Challenge: https://challenge.isic-archive.com/landing/2017/
-
+https://challenge.isic-archive.com/data/#2017
 
 ---
+
 
 ## Run Locally
 
@@ -113,13 +119,28 @@ streamlit run app.py
 
 ---
 
-## Limitations
+## Resources
 
-- Classical ML inherently limited for dermoscopic classification — deep learning (CNN) expected to yield significantly higher AUC (0.85–0.94)
-- Pipeline does not implement ABCD rule features (asymmetry, border, color variation, diameter)
-- Validation set small (n=30 malignant), test set results are primary performance reference
-- Model trained and evaluated on ISIC 2017 only — generalizability to other populations not validated
+* GitHub Repository:
+  https://github.com/unvariablehuman/Skinical
+
+* Presentation Materials:
+  https://canva.link/ccytf8m7ivy64n8
+
+* Demo Video:
+  https://drive.google.com/drive/folders/1lk6efINcuAxPOEoOyXHWBwztVKySC9os?usp=sharing
+
+* Supplementary Materials:
+  https://drive.google.com/drive/folders/1pyvyDu4OkUTSgECoMG8wVlH_vy-yXcB2
 
 ---
 
-*COMP7116001 Computer Vision · Group Project · BINUS University · 2026*
+## Limitations
+
+* The framework is evaluated only for binary classification between benign and malignant lesions.
+* Validation on larger and independent clinical datasets is required to assess generalization capability.
+* The hybrid feature extraction pipeline introduces additional computational cost compared with single-stream approaches.
+
+---
+
+*COMP7116001 Computer Vision · Group 5 · BINUS University · 2026*
